@@ -17,7 +17,7 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-	if repository.Verify(email, password) {
+	if !repository.Verify(email, password) {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status": 401,
 			"error":  "email or password is wrong",

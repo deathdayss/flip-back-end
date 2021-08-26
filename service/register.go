@@ -41,7 +41,3 @@ func Register(c *gin.Context) {
 		"message": "register successfully",
 	})
 }
-
-func Login(c *gin.Context) {
-	
-}
