@@ -20,7 +20,7 @@ func FindPerson(email string) (*models.Person, error) {
 	return &p, nil
 }
 
-func Add(email, password, nickname string) error {
+func AddUser(email, password, nickname string) error {
 	p := models.Person{
 		Email:    email,
 		Password: password,
@@ -38,5 +38,14 @@ func Verify(email, password string) bool {
 		return false
 	} else {
 		return true
+	}
+}
+
+func FindNickName(id int) string {
+	p := models.Person{}
+	if err := models.DbClient.MsClient.Where("id = ?", id).First(&p).Error; err != nil {
+		return "anonymity"
+	} else {
+		return p.Nickname
 	}
 }

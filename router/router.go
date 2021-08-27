@@ -18,5 +18,9 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		userFeature.POST("/register", service.Register) // /v1/user/register
 		userFeature.POST("/login", service.Login)
 	}
+	rankFeature := engine.Group("/v1/rank")
+	{
+		rankFeature.GET("/zone", service.GetGameRanking)
+	}
 	return engine
 }

@@ -29,7 +29,7 @@ func Register(c *gin.Context) {
 		})
 		return
 	}
-	if repository.Add(email, password, nickname) != nil {
+	if repository.AddUser(email, password, nickname) != nil {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
 			"error":  "can not register",
