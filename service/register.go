@@ -1,10 +1,10 @@
 package service
 
 import (
-	"D/flip-back-end/repository"
 	"net/http"
 	"strings"
 
+	"github.com/deathdayss/flip-back-end/repository"
 	"github.com/gin-gonic/gin"
 )
 

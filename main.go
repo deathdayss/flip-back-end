@@ -1,9 +1,8 @@
 package main
 
 import (
-	"D/flip-back-end/models"
-	"D/flip-back-end/router"
-
+	"github.com/deathdayss/flip-back-end/models"
+	"github.com/deathdayss/flip-back-end/router"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )

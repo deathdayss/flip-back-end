@@ -1,6 +1,6 @@
 package repository
 
-import "D/flip-back-end/models"
+import "github.com/deathdayss/flip-back-end/models"
 
 func CheckExistence(email string) bool {
 	_, err := FindPerson(email)

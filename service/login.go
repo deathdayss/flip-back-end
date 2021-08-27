@@ -1,9 +1,9 @@
 package service
 
 import (
-	"D/flip-back-end/repository"
 	"net/http"
 
+	"github.com/deathdayss/flip-back-end/repository"
 	"github.com/gin-gonic/gin"
 )
 

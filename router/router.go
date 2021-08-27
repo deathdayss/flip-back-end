@@ -1,9 +1,9 @@
 package router
 
 import (
-	"D/flip-back-end/service"
 	"net/http"
 
+	"github.com/deathdayss/flip-back-end/service"
 	"github.com/gin-gonic/gin"
 )
 
