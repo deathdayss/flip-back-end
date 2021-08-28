@@ -21,7 +21,7 @@ func GetGameRanking(c *gin.Context) {
 		return
 	}
 	rankInfo, err := repository.GetGameRanking(zone, num)
-	if err != nil {
+	if err != nil || len(*rankInfo) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,
 			"error":  "no data",
