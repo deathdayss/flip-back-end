@@ -2,7 +2,7 @@ package service
 
 import (
 	"net/http"
-	"os"
+	"io/ioutil"
 	"strconv"
 
 	"github.com/deathdayss/flip-back-end/dto"
@@ -31,9 +31,9 @@ func GetGameRanking(c *gin.Context) {
 
 	rankList := []dto.RankItem{}
 	for _, ri := range (*rankInfo) {
-		fp, err := os.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
+		fp, err := ioutil.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
 		if err != nil {
-			fp, _ = os.ReadFile("./storage/thumbnail/not_found.png")
+			fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
 		}
 		rankList = append(rankList, dto.RankItem{
 			ID : ri.ID,
