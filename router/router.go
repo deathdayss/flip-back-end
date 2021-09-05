@@ -13,7 +13,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	engine.NoRoute(func(context *gin.Context) {
 		context.String(http.StatusNotFound, "The router is wrong.")
 	})
-	userFeature := engine.Group("/v1/user") 
+	userFeature := engine.Group("/v1/user")
 	{
 		userFeature.POST("/register", service.Register) // /v1/user/register
 		userFeature.POST("/login", service.Login)
@@ -21,6 +21,10 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	rankFeature := engine.Group("/v1/rank")
 	{
 		rankFeature.GET("/zone", service.GetGameRanking)
+	}
+	userinfoFeature := engine.Group("/v1/userinfo")
+	{
+		userinfoFeature.GET("/zone", service.GetUserInfo)
 	}
 	return engine
 }
