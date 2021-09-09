@@ -15,7 +15,7 @@ func GetUserInfo(c *gin.Context) {
 		})
 		return
 	}
-	if repository.CheckId(id) {
+	if repository.CheckID(id) {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
 			"error":  "id is not found",
