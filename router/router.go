@@ -21,6 +21,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	rankFeature := engine.Group("/v1/rank")
 	{
 		rankFeature.GET("/zone", service.GetGameRanking)
+		rankFeature.GET("/zone", service.GetGameRankingDownloading)
 	}
 	userinfoFeature := engine.Group("/v1/userinfo")
 	{
