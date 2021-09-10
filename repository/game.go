@@ -9,10 +9,10 @@ func AddGame(name, email, imgUrl, zone string) error {
 	}
 	uid := author.ID
 	g := models.Game{
-		Name: name,
+		Name:   name,
 		ImgUrl: imgUrl,
-		UID: uid,
-		Zone: zone,
+		UID:    uid,
+		Zone:   zone,
 	}
 	if err := models.DbClient.MsClient.Create(&g).Error; err != nil {
 		return err
