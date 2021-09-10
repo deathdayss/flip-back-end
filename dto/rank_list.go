@@ -6,6 +6,6 @@ type RankItem struct {
 	LikeNum int `json:"like_num"`
 	DownloadNum int `json:"download_num`
 	CommentNum int `json:"comment_num`
-	Img []byte `json:"img"`
+	Img string `json:"img"`
 	AuthorName string `json:author_name`
 }
