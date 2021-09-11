@@ -1,9 +1,11 @@
 package service
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/deathdayss/flip-back-end/repository"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func GetUserInfo(c *gin.Context) {
@@ -15,7 +17,17 @@ func GetUserInfo(c *gin.Context) {
 		})
 		return
 	}
-	if repository.CheckID(id) {
+
+	idnum, err := strconv.Atoi(id)
+
+	if err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "Invalid id",
+		})
+		return
+	}
+	if !repository.CheckID(idnum) {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
 			"error":  "id is not found",
@@ -23,8 +35,8 @@ func GetUserInfo(c *gin.Context) {
 		return
 	}
 
-	userInfo, err := repository.FindUser(id)
-	if err != nil || len(*userInfo) == 0 {
+	userInfo, err := repository.FindUser(idnum)
+	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,
 			"error":  "no userinfo",
