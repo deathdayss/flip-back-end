@@ -27,5 +27,13 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		userinfoFeature.POST("/getuserinfo", service.GetUserInfo)
 	}
+	downloadFeature := engine.Group("/v1/download") 
+	{
+		downloadFeature.GET("/img", service.DownloadImg)
+	}
+	uploadFeature := engine.Group("/v1/upload")
+	{
+		uploadFeature.POST("/img", service.UploadImg)
+	}
 	return engine
 }

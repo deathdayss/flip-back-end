@@ -23,8 +23,8 @@ func AddGame(name, email, imgUrl, zone string) error {
 func GetGameRanking(zone string, num int) (*[]models.Game, error) {
 	result := []models.Game{}
 	err := models.DbClient.MsClient.Where("zone = ?", zone).
-		Order("like_num DESC").
-		Limit(num).
+		Order("like_num DESC"). // order by like_num DESC
+		Limit(num). // limit num
 		Find(&result).Error
 	if err != nil {
 		return nil, err
