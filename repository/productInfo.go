@@ -2,10 +2,13 @@ package repository
 
 import "github.com/deathdayss/flip-back-end/models"
 
-func GetProductInfo(pid int) (*models.Game, error) {
-	result := models.Game{}
-
-	return &result, nil
+func GetProductInfo(pid int) (*models.ProductInfo, error) {
+	p := models.ProductInfo{}
+	if err := models.DbClient.MsClient.Where("ID = ?", pid).First(&p).Error; err != nil {
+		return nil, err
+	} else {
+		return &p, nil
+	}
 }
 
 func CheckGameExistence(pid int) bool {
@@ -17,8 +20,8 @@ func CheckGameExistence(pid int) bool {
 	}
 }
 
-func FindGame(pid int) (*models.Game, error) {
-	g := models.Game{}
+func FindGame(pid int) (*models.ProductInfo, error) {
+	g := models.ProductInfo{}
 	err := models.DbClient.MsClient.Where("ID = ?", pid).First(&g).Error
 	if err != nil {
 		return nil, err

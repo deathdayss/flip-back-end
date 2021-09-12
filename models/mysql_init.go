@@ -34,4 +34,5 @@ func (db *Db) Close() {
 func (db *Db) AutoCreateTable() {
 	db.MsClient.AutoMigrate(&Person{})
 	db.MsClient.AutoMigrate(&Game{})
+	db.MsClient.AutoMigrate(&ProductInfo{})
 }

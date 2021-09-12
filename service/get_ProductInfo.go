@@ -5,7 +5,6 @@ import (
 	//"io/ioutil"
 	"strconv"
 
-	"github.com/deathdayss/flip-back-end/dto"
 	"github.com/deathdayss/flip-back-end/repository"
 
 	//"github.com/deathdayss/flip-back-end/dto"
@@ -30,8 +29,14 @@ func GetProductInfo(c *gin.Context) { //gin.Context用于处理http请求
 		return
 	}
 
-	productInfo := dto.ProductItem{}
+	//上面检查输入是否合法完毕
+	//下面返回查询到的值
 
-	return productInfo
+	productInfo, err := repository.GetProductInfo(pid)
+
+	c.JSON(http.StatusOK, gin.H{
+		"Status":      200,
+		"ProductInfo": productInfo,
+	})
 
 }
