@@ -20,6 +20,15 @@ func AddGame(name, email, imgUrl, zone string) error {
 	return nil
 }
 
+func VerifyGame(id string) bool {
+	p := models.Game{}
+	if err := models.DbClient.MsClient.Where("ID = ?", id).First(&p).Error; err != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
 func GetGameRanking(zone string, num int) (*[]models.Game, error) {
 	result := []models.Game{}
 	err := models.DbClient.MsClient.Where("zone = ?", zone).

@@ -34,6 +34,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	uploadFeature := engine.Group("/v1/upload")
 	{
 		uploadFeature.POST("/img", service.UploadImg)
+		uploadFeature.POST("/game", service.UploadZip)
 	}
 	return engine
 }
