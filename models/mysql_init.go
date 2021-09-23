@@ -30,4 +30,6 @@ func (db *Db) Close() {
 func (db *Db) AutoCreateTable() {
 	db.MsClient.AutoMigrate(&Person{})
 	db.MsClient.AutoMigrate(&Game{})
+	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&Like{})
+	db.MsClient.Model(&Like{}).AddIndex("user_id", "game_id")
 }

@@ -36,5 +36,10 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		uploadFeature.POST("/img", service.UploadImg)
 		uploadFeature.POST("/game", service.UploadZip)
 	}
+	likeFeature := engine.Group("/v1/like")
+	{
+		likeFeature.GET("/click", service.LikeOrUnlike)
+		likeFeature.GET("/check", service.HasLike)
+	}
 	return engine
 }
