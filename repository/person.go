@@ -32,7 +32,7 @@ func AddUser(email, password, nickname string) error {
 	return nil
 }
 
-func Verify(email, password string) bool {
+func VerifyPerson(email, password string) bool {
 	p := models.Person{}
 	if err := models.DbClient.MsClient.Where("email = ? AND password = ?", string(email), string(password)).First(&p).Error; err != nil {
 		return false

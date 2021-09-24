@@ -21,6 +21,11 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	rankFeature := engine.Group("/v1/rank")
 	{
 		rankFeature.GET("/zone", service.GetGameRanking)
+		rankFeature.GET("/download", service.GetGameRankingDownloading)
+	}
+	userinfoFeature := engine.Group("/v1/info")
+	{
+		userinfoFeature.POST("/getuserinfo", service.GetUserInfo)
 	}
 	downloadFeature := engine.Group("/v1/download")
 	{
@@ -29,6 +34,13 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	uploadFeature := engine.Group("/v1/upload")
 	{
 		uploadFeature.POST("/img", service.UploadImg)
+		uploadFeature.POST("/game", service.UploadZip)
+	}
+	likeFeature := engine.Group("/v1/like")
+	{
+		likeFeature.GET("/click", service.LikeOrUnlike)
+		likeFeature.GET("/check", service.HasLike)
+		likeFeature.GET("/num", service.GetLikeNum)
 	}
 	getInfoFeature := engine.Group("/v1/get")
 	{
