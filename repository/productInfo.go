@@ -2,17 +2,17 @@ package repository
 
 import "github.com/deathdayss/flip-back-end/models"
 
-func GetProductInfo(pid int) (*models.ProductInfo, error) {
+func GetProductInfo(GID int) (*models.ProductInfo, error) {
 	p := models.ProductInfo{}
-	if err := models.DbClient.MsClient.Where("ID = ?", pid).First(&p).Error; err != nil {
+	if err := models.DbClient.MsClient.Where("ID = ?", GID).First(&p).Error; err != nil {
 		return nil, err
 	} else {
 		return &p, nil
 	}
 }
 
-func CheckGameExistence(pid int) bool {
-	_, err := FindGame(pid)
+func CheckGameExistence(GID int) bool {
+	_, err := FindGame(GID)
 	if err == nil {
 		return true
 	} else {
@@ -20,9 +20,9 @@ func CheckGameExistence(pid int) bool {
 	}
 }
 
-func FindGame(pid int) (*models.ProductInfo, error) {
+func FindGame(GID int) (*models.ProductInfo, error) {
 	g := models.ProductInfo{}
-	err := models.DbClient.MsClient.Where("ID = ?", pid).First(&g).Error
+	err := models.DbClient.MsClient.Where("ID = ?", GID).First(&g).Error
 	if err != nil {
 		return nil, err
 	}

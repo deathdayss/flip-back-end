@@ -34,5 +34,11 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		getInfoFeature.GET("/product", service.GetProductInfo)
 	}
+
+	verificationCodeFeature := engine.Group("/v1/verification")
+	{
+		verificationCodeFeature.GET("/code", service.GetCode)
+	}
+
 	return engine
 }
