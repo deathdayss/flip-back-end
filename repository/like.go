@@ -45,3 +45,14 @@ func IsExist(gid, uid string, tx *gorm.DB) bool  {
 		return true
 	}
 }
+
+func GetLikeNum(gid string) (int, error) {
+	var count int
+	err := models.DbClient.MsClient.Model(&models.Like{}).Where("game_id = ?", gid).Count(&count).Error
+	if err != nil {
+		return 0, err
+	} else {
+		return count, nil
+	}
+
+}

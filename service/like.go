@@ -27,6 +27,21 @@ func LikeOrUnlike(c *gin.Context) {
 	}
 }
 
+func GetLikeNum(c *gin.Context) {
+	gid := c.Query("GID")
+	count, err := repository.GetLikeNum(gid)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": err.Error(),
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"status": http.StatusOK,
+			"count": count,
+		})
+	}
+}
 func HasLike(c *gin.Context) {
 	gid := c.Query("GID")
 	uid := c.Query("UID")

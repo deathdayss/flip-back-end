@@ -40,6 +40,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		likeFeature.GET("/click", service.LikeOrUnlike)
 		likeFeature.GET("/check", service.HasLike)
+		likeFeature.GET("/num", service.GetLikeNum)
 	}
 	return engine
 }
