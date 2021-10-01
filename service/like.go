@@ -15,13 +15,13 @@ func LikeOrUnlike(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": http.StatusBadRequest,
-			"error": "can not like/unlike",
+			"error":  "can not like/unlike",
 		})
 		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"status": http.StatusOK,
-			"msg": "successfully like/unlike",
+			"msg":    "successfully like/unlike",
 		})
 		return
 	}
@@ -33,15 +33,16 @@ func GetLikeNum(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": http.StatusBadRequest,
-			"error": err.Error(),
+			"error":  err.Error(),
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"status": http.StatusOK,
-			"count": count,
+			"count":  count,
 		})
 	}
 }
+
 func HasLike(c *gin.Context) {
 	gid := c.Query("GID")
 	uid := c.Query("UID")
@@ -49,13 +50,13 @@ func HasLike(c *gin.Context) {
 	if hasLike {
 		c.JSON(http.StatusOK, gin.H{
 			"status": http.StatusOK,
-			"msg": true,
+			"msg":    true,
 		})
 		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"status": http.StatusOK,
-			"msg": false,
+			"msg":    false,
 		})
 		return
 	}

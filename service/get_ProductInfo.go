@@ -32,11 +32,18 @@ func GetProductInfo(c *gin.Context) { //gin.Context用于处理http请求
 	//上面检查输入是否合法完毕
 	//下面返回查询到的值
 
-	productInfo, err := repository.GetProductInfo(GID)
-
+	game, err := repository.GetProductInfo(GID)
 	c.JSON(http.StatusOK, gin.H{
-		"Status":      200,
-		"ProductInfo": productInfo,
+		"Status":         200,
+		"ID":             game.ID,
+		"game_name":      game.Name,
+		"like_num":       repository.FindLikeNum(GID),
+		"collection_num": repository.FindCollectionNum(GID),
+		"share_num":      repository.FindShareNum(GID),
+		"introduction":   game.Introduction,
+		"img_url":        game.ImgUrl,
+		"uid":            game.UID,
+		"time":           game.CreateAt,
+		"click_count":    repository.FindClickCount(GID),
 	})
-
 }

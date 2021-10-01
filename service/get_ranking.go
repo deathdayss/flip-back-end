@@ -19,6 +19,7 @@ func GetGameRanking(c *gin.Context) {
 		})
 		return
 	}
+
 	rankInfo, err := repository.GetGameRanking(zone, num)
 	if err != nil || len(*rankInfo) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -35,14 +36,15 @@ func GetGameRanking(c *gin.Context) {
 			if err != nil {
 				fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
 			}*/
+
 		rankList = append(rankList, dto.RankItem{
 			ID:          ri.ID,
-			Name:        ri.Name,
+			Name:        repository.FindGameName(ri.ID),
 			LikeNum:     ri.LikeNum,
 			DownloadNum: ri.DownloadNum,
 			CommentNum:  ri.CommentNum,
-			Img:         ri.ImgUrl,
-			AuthorName:  repository.FindNickName(ri.UID),
+			Img:         repository.FindGameImgUrl(ri.ID),
+			AuthorName:  repository.FindNickName(repository.FindUserID(ri.ID)),
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{

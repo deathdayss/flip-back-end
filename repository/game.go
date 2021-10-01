@@ -29,6 +29,100 @@ func VerifyGame(id string) bool {
 	}
 }
 
+func GetGameRanking(zone string, num int) (*[]models.ProductInfo, error) {
+	result := []models.ProductInfo{}
+	err := models.DbClient.MsClient.Where("zone = ?", zone).
+		Order("like_num DESC"). // order by like_num DESC
+		Limit(num).             // limit num
+		Find(&result).Error
+	if err != nil {
+		return nil, err
+	}
+	actualLen := len(result)
+	if actualLen < num {
+		for i := actualLen; i < num; i++ {
+			result = append(result, result[i%actualLen])
+		}
+	}
+	return &result, nil
+}
+
+func GetGameRankingDownloading(zone string, num int) (*[]models.ProductInfo, error) {
+	result := []models.ProductInfo{}
+	err := models.DbClient.MsClient.Where("zone = ?", zone).
+		Order("download_num DESC").
+		Limit(num).
+		Find(&result).Error
+	if err != nil {
+		return nil, err
+	}
+	actualLen := len(result)
+	if actualLen < num {
+		for i := actualLen; i < num; i++ {
+			result = append(result, result[i%actualLen])
+		}
+	}
+	return &result, nil
+}
+
+//以下都是用来返回game列表中的参数的
+
+func FindGameName(GID int) string {
+	g := models.Game{}
+	if err := models.DbClient.MsClient.Where("id = ?", GID).First(&g).Error; err != nil {
+		return "Undefined"
+	} else {
+		return g.Name
+	}
+}
+
+func FindGameIntroduction(GID int) string {
+	g := models.Game{}
+	if err := models.DbClient.MsClient.Where("id = ?", GID).First(&g).Error; err != nil {
+		return "Undefined"
+	} else {
+		return g.Introduction
+	}
+}
+
+func FindGameImgUrl(GID int) string {
+	g := models.Game{}
+	if err := models.DbClient.MsClient.Where("id = ?", GID).First(&g).Error; err != nil {
+		return "Undefined"
+	} else {
+		return g.ImgUrl
+	}
+}
+
+func FindGameFileUrl(GID int) string {
+	g := models.Game{}
+	if err := models.DbClient.MsClient.Where("id = ?", GID).First(&g).Error; err != nil {
+		return "Undefined"
+	} else {
+		return g.FileUrl
+	}
+}
+
+func FindGameCreateAt(GID int) string {
+	g := models.Game{}
+	if err := models.DbClient.MsClient.Where("id = ?", GID).First(&g).Error; err != nil {
+		return "Undefined"
+	} else {
+		return g.CreateAt
+	}
+}
+
+func FindUserID(GID int) int {
+	g := models.Game{}
+	if err := models.DbClient.MsClient.Where("id = ?", GID).First(&g).Error; err != nil {
+		return 0
+	} else {
+		return g.UID
+	}
+}
+
+/*
+调整数据库结构之前的样子
 func GetGameRanking(zone string, num int) (*[]models.Game, error) {
 	result := []models.Game{}
 	err := models.DbClient.MsClient.Where("zone = ?", zone).
@@ -64,3 +158,4 @@ func GetGameRankingDownloading(zone string, num int) (*[]models.Game, error) {
 	}
 	return &result, nil
 }
+*/

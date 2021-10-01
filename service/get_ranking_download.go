@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+/*
+ */
 func GetGameRankingDownloading(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	zone := c.Query("zone")
@@ -37,12 +39,12 @@ func GetGameRankingDownloading(c *gin.Context) {
 			}*/
 		rankList = append(rankList, dto.RankItem{
 			ID:          ri.ID,
-			Name:        ri.Name,
+			Name:        repository.FindGameName(ri.ID),
 			LikeNum:     ri.LikeNum,
 			DownloadNum: ri.DownloadNum,
 			CommentNum:  ri.CommentNum,
-			Img:         ri.ImgUrl,
-			AuthorName:  repository.FindNickName(ri.UID),
+			Img:         repository.FindGameImgUrl(ri.ID),
+			AuthorName:  repository.FindNickName(repository.FindUserID(ri.ID)),
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{

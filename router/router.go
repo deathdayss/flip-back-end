@@ -42,6 +42,12 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		likeFeature.GET("/check", service.HasLike)
 		likeFeature.GET("/num", service.GetLikeNum)
 	}
+
+	shareFeature := engine.Group("/v1/share")
+	{
+		shareFeature.GET("/share", service.ShareOperation)
+	}
+
 	getInfoFeature := engine.Group("/v1/get")
 	{
 		getInfoFeature.GET("/product", service.GetProductInfo)

@@ -37,7 +37,7 @@ func LikeOrUnlike(gid, uid string) error {
 	return nil
 }
 
-func IsExist(gid, uid string, tx *gorm.DB) bool  {
+func IsExist(gid, uid string, tx *gorm.DB) bool {
 	l := models.Like{}
 	if err := tx.Where("user_id = ? AND game_id = ?", uid, gid).First(&l).Error; err != nil {
 		return false
@@ -54,5 +54,4 @@ func GetLikeNum(gid string) (int, error) {
 	} else {
 		return count, nil
 	}
-
 }
