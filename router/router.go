@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/deathdayss/flip-back-end/middleware"
 	"github.com/deathdayss/flip-back-end/service"
 	"github.com/gin-gonic/gin"
 )
@@ -13,10 +14,12 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	engine.NoRoute(func(context *gin.Context) {
 		context.String(http.StatusNotFound, "The router is wrong.")
 	})
-	userFeature := engine.Group("/v1/user")
+	userFeature := engine.Group("/v1/user").Use(middleware.Auth())
 	{
 		userFeature.POST("/register", service.Register) // /v1/user/register
 		userFeature.POST("/login", service.Login)
+		userFeature.GET("/dataByTime", service.GetDataByTime)
+
 	}
 	rankFeature := engine.Group("/v1/rank")
 	{
@@ -27,7 +30,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		userinfoFeature.POST("/getuserinfo", service.GetUserInfo)
 	}
-	downloadFeature := engine.Group("/v1/download") 
+	downloadFeature := engine.Group("/v1/download")
 	{
 		downloadFeature.GET("/img", service.DownloadImg)
 	}
@@ -41,6 +44,12 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		likeFeature.GET("/click", service.LikeOrUnlike)
 		likeFeature.GET("/check", service.HasLike)
 		likeFeature.GET("/num", service.GetLikeNum)
+	}
+	collectFeature := engine.Group("/v1/collect")
+	{
+		collectFeature.GET("/click", service.CollectOrUncollect)
+		collectFeature.GET("/check", service.HasCollect)
+		collectFeature.GET("/num", service.GetCollectNum)
 	}
 	return engine
 }
