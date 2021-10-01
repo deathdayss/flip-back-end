@@ -47,6 +47,10 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		shareFeature.GET("/share", service.ShareOperation)
 	}
+	clickReature := engine.Group("/v1/click")
+	{
+		clickReature.GET("/click", service.ClickOperation)
+	}
 
 	getInfoFeature := engine.Group("/v1/get")
 	{

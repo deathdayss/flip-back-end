@@ -1,6 +1,10 @@
 package repository
 
-import "github.com/deathdayss/flip-back-end/models"
+import (
+	"time"
+
+	"github.com/deathdayss/flip-back-end/models"
+)
 
 func AddGame(name, email, imgUrl, zone string) error {
 	author, err := FindPerson(email)
@@ -103,12 +107,12 @@ func FindGameFileUrl(GID int) string {
 	}
 }
 
-func FindGameCreateAt(GID int) string {
+func FindGameCreateAt(GID int) (time.Time, error) {
 	g := models.Game{}
 	if err := models.DbClient.MsClient.Where("id = ?", GID).First(&g).Error; err != nil {
-		return "Undefined"
+		return time.Now(), err
 	} else {
-		return g.CreateAt
+		return g.CreateAt, nil
 	}
 }
 

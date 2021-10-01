@@ -1,14 +1,16 @@
 package models
 
+import "time"
+
 type Game struct {
-	ID           int    `gorm:"column:id;AUTO_INCREMENT"`
-	Name         string `json:"name"`
-	Introduction string `json:"introduction"`
-	ImgUrl       string `json:"img_url"`
-	UID          int    `json:"uid"`
-	FileUrl      string `json:"file_url"`
-	Zone         string `json:"zone"`
-	CreateAt     string `json:"create_at"`
+	ID           int       `gorm:"column:id;AUTO_INCREMENT"`
+	Name         string    `json:"name"`
+	Introduction string    `json:"introduction"`
+	ImgUrl       string    `json:"img_url"`
+	UID          int       `json:"uid"`
+	FileUrl      string    `json:"file_url"`
+	Zone         string    `json:"zone"`
+	CreateAt     time.Time `json:"create_at"`
 }
 
 /*
