@@ -2,10 +2,10 @@ package repository
 
 import "github.com/deathdayss/flip-back-end/models"
 
-func AddGame(name, email, imgUrl, zone string) error {
+func AddGame(name, email, imgUrl, fileUrl, zone string) (int, error) {
 	author, err := FindPerson(email)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	uid := author.ID
 	g := models.Game{
@@ -13,8 +13,33 @@ func AddGame(name, email, imgUrl, zone string) error {
 		ImgUrl: imgUrl,
 		UID:    uid,
 		Zone:   zone,
+		FileUrl: fileUrl,
 	}
 	if err := models.DbClient.MsClient.Create(&g).Error; err != nil {
+		return 0, err
+	}
+	return g.ID, nil
+}
+
+func DeleteGame(id int) error {
+	g := models.Game{
+		ID: id,
+	}
+	if err := models.DbClient.MsClient.Model(&models.Game{}).Delete(&g).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateGameByID(id int, name, imgUrl, zone string, uid int) error {
+	g := models.Game{
+		ID: id,
+		Name: name,
+		ImgUrl: imgUrl,
+		Zone: zone,
+		UID: uid,
+	}
+	if err := models.DbClient.MsClient.Model(&models.Game{}).Update(&g).Error; err != nil {
 		return err
 	}
 	return nil
