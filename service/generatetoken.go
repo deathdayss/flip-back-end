@@ -42,7 +42,7 @@ func generateToken(c *gin.Context, p models.Person) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status": 200,
-		"msg":    "登录成功！",
+		"msg":    "login successfully",
 		"data":   data,
 	})
 	return
@@ -52,8 +52,8 @@ func GetDataByTime(c *gin.Context) {
 	claims := c.MustGet("claims").(*models.UserClaims)
 	if claims != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"status": 0,
-			"msg":    "token有效",
+			"status": 200,
+			"msg":    "token is vilid",
 			"data":   claims,
 		})
 	}
