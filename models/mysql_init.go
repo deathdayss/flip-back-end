@@ -19,7 +19,7 @@ func (db *Db) Init() {
 }
 
 func InitMySql() *gorm.DB {
-	sqlDB, _ := gorm.Open("mysql", "ziyi:Geziyi123.@tcp(106.52.167.166:3306)/comp")
+	sqlDB, _ := gorm.Open("mysql", "root:root@tcp(localhost:3306)/flip")
 	return sqlDB
 }
 
