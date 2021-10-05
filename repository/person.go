@@ -41,13 +41,13 @@ func VerifyPerson(email, password string) bool {
 	}
 }
 
-func GetUser(email string) (models.Person, error) {
+func GetUser(email string) (*models.Person, error) {
 	p := models.Person{}
-	err := models.DbClient.MsClient.Where("ID = ?", email).First(&p).Error
+	err := models.DbClient.MsClient.Where("ID = ?", string(email)).First(&p).Error
 	if err != nil {
-		return p, err
+		return nil, err
 	}
-	return p, nil
+	return &p, nil
 }
 
 func FindNickName(id int) string {

@@ -14,12 +14,15 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	engine.NoRoute(func(context *gin.Context) {
 		context.String(http.StatusNotFound, "The router is wrong.")
 	})
-	userFeature := engine.Group("/v1/user").Use(middleware.Auth())
+	userFeature := engine.Group("/v1/user")
 	{
 		userFeature.POST("/register", service.Register) // /v1/user/register
 		userFeature.POST("/login", service.Login)
-		userFeature.GET("/dataByTime", service.GetDataByTime)
-
+	}
+	dataFeature := engine.Group("/v1/data")
+	dataFeature.Use(middleware.Auth())
+	{
+		dataFeature.GET("/datebytime", service.GetDataByTime)
 	}
 	rankFeature := engine.Group("/v1/rank")
 	{
