@@ -65,6 +65,7 @@ func UploadZip(c *gin.Context) {
 		})
 		return
 	}
+	repository.UpdateGameFileUrl(processID, saveName)
 	c.JSON(http.StatusOK, gin.H{
 		"status": http.StatusOK,
 		"ID" : processID,

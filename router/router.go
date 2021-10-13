@@ -30,6 +30,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	downloadFeature := engine.Group("/v1/download") 
 	{
 		downloadFeature.GET("/img", service.DownloadImg)
+		downloadFeature.GET("/game", service.DownloadGame)
 	}
 	uploadFeature := engine.Group("/v1/upload")
 	{

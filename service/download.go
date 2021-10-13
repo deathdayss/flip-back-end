@@ -6,8 +6,31 @@ import (
 	"os"
 	"strings"
 
+	"github.com/deathdayss/flip-back-end/repository"
 	"github.com/gin-gonic/gin"
 )
+
+func DownloadGame(c *gin.Context) {
+	gid := c.Query("game_id")
+	game, err := repository.GetGame(gid)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": "the game id is wrong",
+		})
+		return
+	}
+	if _, err := os.Stat("./storage/game/"+game.FileUrl); os.IsNotExist(err) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": "the img name is wrong",
+		})
+		return
+	}
+	c.Writer.Header().Add("Content-Type", "Application/zip")
+	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("inline;filename=%s", game.FileUrl))
+	c.File("./storage/game/"+game.FileUrl)
+}
 
 func DownloadImg(c *gin.Context) {
 	filename := c.Query("img_name")

@@ -1,6 +1,8 @@
 package repository
 
-import "github.com/deathdayss/flip-back-end/models"
+import (
+	"github.com/deathdayss/flip-back-end/models"
+)
 
 func AddGame(name, email, imgUrl, fileUrl, zone string) (int, error) {
 	author, err := FindPerson(email)
@@ -30,7 +32,16 @@ func DeleteGame(id int) error {
 	}
 	return nil
 }
-
+func UpdateGameFileUrl(id int, fileUrl string) error {
+	g := models.Game{
+		ID: id,
+		FileUrl: fileUrl,
+	}
+	if err := models.DbClient.MsClient.Model(&models.Game{}).Update(&g).Error; err != nil {
+		return err
+	}
+	return nil
+}
 func UpdateGameByID(id int, name, imgUrl, zone string, uid int) error {
 	g := models.Game{
 		ID: id,
@@ -54,6 +65,14 @@ func VerifyGame(id string) bool {
 	}
 }
 
+func GetGame(id string) (models.Game, error) {
+	game := models.Game{}
+	if err := models.DbClient.MsClient.Where("id = ?", id).First(&game).Error; err != nil {
+		return game, err
+	} else {
+		return game, nil
+	}
+}
 func GetGameRanking(zone string, num int) (*[]models.Game, error) {
 	result := []models.Game{}
 	err := models.DbClient.MsClient.Where("zone = ?", zone).
