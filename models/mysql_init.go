@@ -19,7 +19,7 @@ func (db *Db) Init() {
 }
 
 func InitMySql() *gorm.DB {
-	sqlDB, _ := gorm.Open("mysql", "root:Cptbtptp1790340626.@tcp(127.0.0.1:3306)/comp")
+	sqlDB, _ := gorm.Open("mysql", "root:root@tcp(localhost:3306)/flip")
 	return sqlDB
 }
 
@@ -32,4 +32,6 @@ func (db *Db) AutoCreateTable() {
 	db.MsClient.AutoMigrate(&Game{})
 	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&Like{})
 	db.MsClient.Model(&Like{}).AddIndex("user_id", "game_id")
+	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&Collect{})
+	db.MsClient.Model(&Collect{}).AddIndex("user_id", "game_id")
 }

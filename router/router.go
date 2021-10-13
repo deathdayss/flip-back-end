@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/deathdayss/flip-back-end/middleware"
 	"github.com/deathdayss/flip-back-end/service"
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +19,11 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		userFeature.POST("/register", service.Register) // /v1/user/register
 		userFeature.POST("/login", service.Login)
 	}
+	dataFeature := engine.Group("/v1/data")
+	dataFeature.Use(middleware.Auth())
+	{
+		dataFeature.GET("/datebytime", service.GetDataByTime)
+	}
 	rankFeature := engine.Group("/v1/rank")
 	{
 		rankFeature.GET("/zone", service.GetGameRanking)
@@ -27,7 +33,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		userinfoFeature.POST("/getuserinfo", service.GetUserInfo)
 	}
-	downloadFeature := engine.Group("/v1/download") 
+	downloadFeature := engine.Group("/v1/download")
 	{
 		downloadFeature.GET("/img", service.DownloadImg)
 		downloadFeature.GET("/game", service.DownloadGame)
@@ -42,6 +48,12 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		likeFeature.GET("/click", service.LikeOrUnlike)
 		likeFeature.GET("/check", service.HasLike)
 		likeFeature.GET("/num", service.GetLikeNum)
+	}
+	collectFeature := engine.Group("/v1/collect")
+	{
+		collectFeature.GET("/click", service.CollectOrUncollect)
+		collectFeature.GET("/check", service.HasCollect)
+		collectFeature.GET("/num", service.GetCollectNum)
 	}
 	return engine
 }
