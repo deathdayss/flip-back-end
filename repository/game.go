@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/deathdayss/flip-back-end/models"
 )
 
@@ -83,6 +85,9 @@ func GetGameRanking(zone string, num int) (*[]models.Game, error) {
 		return nil, err
 	}
 	actualLen := len(result)
+	if actualLen == 0 {
+		return nil, errors.New("No data")
+	}
 	if actualLen < num {
 		for i := actualLen; i < num; i++ {
 			result = append(result, result[i%actualLen])
