@@ -55,5 +55,11 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		collectFeature.GET("/check", service.HasCollect)
 		collectFeature.GET("/num", service.GetCollectNum)
 	}
+
+	verificationCodeFeature := engine.Group("/v1/verification")
+	{
+		verificationCodeFeature.GET("/code", service.GetCode)
+	}
+
 	return engine
 }
