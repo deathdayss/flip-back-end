@@ -20,3 +20,9 @@ type UserClaims struct {
 	Email string
 	jwt.StandardClaims
 }
+
+type PersonImg struct {
+	ID int `gorm:"primary_key;AUTO_INCREMENT"`
+	UID int `gorm:"uid; not null"`
+	URL string `gorm:"url; not null`
+}

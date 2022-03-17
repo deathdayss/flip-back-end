@@ -1,6 +1,10 @@
 package repository
 
-import "github.com/deathdayss/flip-back-end/models"
+import (
+	"strconv"
+
+	"github.com/deathdayss/flip-back-end/models"
+)
 
 func CheckExistence(email string) bool {
 	_, err := FindPerson(email)
@@ -20,16 +24,28 @@ func FindPerson(email string) (*models.Person, error) {
 	return &p, nil
 }
 
-func AddUser(email, password, nickname string) (int, error) {
+func AddUser(email, password, nickname string, fileType string) (string, error) {
 	p := models.Person{
 		Email:    email,
 		Password: password,
 		Nickname: nickname,
 	}
-	if err := models.DbClient.MsClient.Create(&p).Error; err != nil {
-		return -1, err
+	tx := models.DbClient.MsClient.Begin()
+	if err := tx.Create(&p).Error; err != nil {
+		tx.Rollback()
+		return "", err
 	}
-	return p.ID, nil
+	saveName := strconv.Itoa(p.ID) + "." + fileType
+	pi := models.PersonImg{
+		UID: p.ID,
+		URL: saveName,
+	}
+	if err := tx.Create(&pi).Error; err != nil {
+		tx.Rollback()
+		return "", err
+	}
+	tx.Commit()
+	return saveName, nil
 }
 
 func VerifyPerson(email, password string) bool {

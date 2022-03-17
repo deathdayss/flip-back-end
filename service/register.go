@@ -3,7 +3,6 @@ package service
 import (
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/deathdayss/flip-back-end/repository"
@@ -49,8 +48,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	fileType := ss[1]
-	pid, err := repository.AddUser(email, password, nickname)
-	saveName := strconv.Itoa(pid) + "." + fileType
+	saveName, err := repository.AddUser(email, password, nickname, fileType)
 	if _, err := os.Stat("./storage/personal/"+saveName); os.IsExist(err) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": http.StatusBadRequest,
