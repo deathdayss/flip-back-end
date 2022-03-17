@@ -20,16 +20,16 @@ func FindPerson(email string) (*models.Person, error) {
 	return &p, nil
 }
 
-func AddUser(email, password, nickname string) error {
+func AddUser(email, password, nickname string) (int, error) {
 	p := models.Person{
 		Email:    email,
 		Password: password,
 		Nickname: nickname,
 	}
 	if err := models.DbClient.MsClient.Create(&p).Error; err != nil {
-		return err
+		return -1, err
 	}
-	return nil
+	return p.ID, nil
 }
 
 func VerifyPerson(email, password string) bool {

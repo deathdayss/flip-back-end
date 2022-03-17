@@ -2,6 +2,8 @@ package service
 
 import (
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
 
 	"github.com/deathdayss/flip-back-end/repository"
@@ -29,10 +31,44 @@ func Register(c *gin.Context) {
 		})
 		return
 	}
-	if repository.AddUser(email, password, nickname) != nil {
+	file, err := c.FormFile("file_body")
+	if err != nil {
+		c.JSON(http.StatusNoContent, gin.H{
+			"status": http.StatusNoContent,
+			"error" : "no data",
+		})
+		return
+	}
+	filename := file.Filename
+	ss := strings.Split(filename, ".")
+	if len(ss) < 2 || (strings.ToLower(ss[1]) != "jpg" && strings.ToLower(ss[1]) != "png") {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": "the img name is wrong",
+		})
+		return
+	}
+	fileType := ss[1]
+	pid, err := repository.AddUser(email, password, nickname)
+	saveName := strconv.Itoa(pid) + "." + fileType
+	if _, err := os.Stat("./storage/personal/"+saveName); os.IsExist(err) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": "the user has been saved",
+		})
+		return
+	}
+	if err != nil {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
 			"error":  "can not register",
+		})
+		return
+	}
+	if err := c.SaveUploadedFile(file, "./storage/personal/"+saveName); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": "the person id is wrong",
 		})
 		return
 	}
