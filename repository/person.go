@@ -35,7 +35,10 @@ func AddUser(email, password, nickname string, fileType string) (string, error) 
 		tx.Rollback()
 		return "", err
 	}
-	saveName := strconv.Itoa(p.ID) + "." + fileType
+	saveName := "default.jpg"
+	if fileType != "default" {
+		saveName = strconv.Itoa(p.ID) + "." + fileType
+	}
 	pi := models.PersonImg{
 		UID: p.ID,
 		URL: saveName,
