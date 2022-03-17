@@ -50,6 +50,16 @@ func AddUser(email, password, nickname string, fileType string) (string, error) 
 	tx.Commit()
 	return saveName, nil
 }
+func FindPersonal(id int) string {
+	pi := models.PersonImg{}
+	if err := models.DbClient.MsClient.Where("uid=?", strconv.Itoa(id)).First(&pi).Error; err != nil {
+		return "default.jpg"
+	}
+	if pi.URL == "" {
+		return "default.jpg"
+	}
+	return pi.URL
+}
 
 func VerifyPerson(email, password string) bool {
 	p := models.Person{}
