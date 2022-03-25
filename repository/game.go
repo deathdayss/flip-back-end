@@ -39,7 +39,7 @@ func UpdateGameFileUrl(id int, fileUrl string) error {
 		ID: id,
 		FileUrl: fileUrl,
 	}
-	if err := models.DbClient.MsClient.Model(&models.Game{}).Update(&g).Error; err != nil {
+	if err := models.DbClient.MsClient.Model(&models.Game{}).Save(&g).Error; err != nil {
 		return err
 	}
 	return nil
@@ -52,7 +52,7 @@ func UpdateGameByID(id int, name, imgUrl, zone string, uid int) error {
 		Zone: zone,
 		UID: uid,
 	}
-	if err := models.DbClient.MsClient.Model(&models.Game{}).Update(&g).Error; err != nil {
+	if err := models.DbClient.MsClient.Model(&models.Game{}).Save(&g).Error; err != nil {
 		return err
 	}
 	return nil

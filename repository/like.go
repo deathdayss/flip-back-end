@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/deathdayss/flip-back-end/models"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 func LikeOrUnlike(gid, uid string) error {
@@ -46,8 +46,8 @@ func IsExist(gid, uid string, tx *gorm.DB) bool  {
 	}
 }
 
-func GetLikeNum(gid string) (int, error) {
-	var count int
+func GetLikeNum(gid string) (int64, error) {
+	var count int64
 	err := models.DbClient.MsClient.Model(&models.Like{}).Where("game_id = ?", gid).Count(&count).Error
 	if err != nil {
 		return 0, err

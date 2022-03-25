@@ -1,9 +1,12 @@
 package repository
 
 import (
+	"reflect"
 	"strconv"
 
 	"github.com/deathdayss/flip-back-end/models"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func CheckExistence(email string) bool {
@@ -108,4 +111,38 @@ func VerifyAnswer(email, question, answer string) bool {
 		}
 		return false
 	}
+}
+
+func GetUserDetail(email string) (*models.PersonDetail, error) {
+	detail := models.PersonDetail{Email: email}
+	if err := models.DbClient.MsClient.Where("email=?", email).First(&detail).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+	return &detail, nil
+}
+
+func ChangeDetail(email string, fieldName string, fieldVal string) error {
+	tx := models.DbClient.MsClient.Begin()
+	details := models.PersonDetail{Email: email}
+	if err := tx.Clauses(clause.Locking{
+		Strength: "UPDATE",
+		Options: "NOWAIT",
+	  }).Where("email=?", email).First(&details).Error; err != nil && err != gorm.ErrRecordNotFound {
+		  tx.Rollback()
+		  return err
+	}
+	if fieldName == "Age" {
+		age, _ := strconv.Atoi(fieldVal)
+		details.Age = age
+	} else {
+		pp := reflect.ValueOf(&details) // 取得struct变量的指针
+		field := pp.Elem().FieldByName(fieldName)
+		field.SetString(fieldVal)
+	}
+	if err := tx.Where("email=?", email).Save(&details).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
 }

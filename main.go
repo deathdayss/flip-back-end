@@ -10,7 +10,6 @@ import (
 
 func main() {
 	models.DbClient.Init()
-	defer models.DbClient.Close()
 	r := gin.New()
 	router.RegisterRouter(r, 
 		middleware.Cors(),

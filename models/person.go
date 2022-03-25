@@ -30,3 +30,10 @@ type PersonImg struct {
 	UID int    `gorm:"uid; not null"`
 	URL string `gorm:"url; not null`
 }
+
+type PersonDetail struct {
+	Email string `gorm:"email; not null; unique"`
+	Birth string `gorm:"birth"`
+	Age int `gorm:"age"`
+	Gender string `gorm: "gender"`
+}
