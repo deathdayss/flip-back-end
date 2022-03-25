@@ -77,4 +77,35 @@ func FindNickName(id int) string {
 	} else {
 		return p.Nickname
 	}
+
+}
+
+func ChangePassword(email, password string) bool {
+	p := models.Person{}
+	if err := models.DbClient.MsClient.Where("email = ?", string(email)).First(&p).Update("password", string(password)).Error; err != nil {
+		return true
+	} else {
+		return false
+	}
+}
+
+func FindAnswer(email string) (*models.Answer, error) {
+	a := models.Answer{}
+	err := models.DbClient.MsClient.Where("email = ?", string(email)).First(&a).Error
+	if err != nil {
+		return nil, err
+	}
+	return &a, nil
+}
+
+func VerifyAnswer(email, question, answer string) bool {
+	a, err := FindAnswer(email)
+	if err != nil {
+		return false
+	} else {
+		if a.Question == question && a.Answer == answer {
+			return true
+		}
+		return false
+	}
 }
