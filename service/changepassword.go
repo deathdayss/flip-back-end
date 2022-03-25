@@ -1,6 +1,7 @@
 package service
 
 import (
+	"container/list"
 	"net/http"
 	"strings"
 
@@ -35,13 +36,22 @@ func ChangePassword(c *gin.Context) {
 		})
 	}
 
+	questionlist := list.New()
+	questionlist.PushBack("sex")
+	questionlist.PushBack("birth")
+	questionlist.PushBack("phone")
+
+	c.JSON(http.StatusOK, gin.H{
+		"question": questionlist,
+	})
+
 	question, ok2 := c.GetPostForm("question")
 	answer, ok3 := c.GetPostForm("answer")
 
 	if !ok2 || !ok3 {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
-			"error":  "question or answer is missing",
+			"error":  "answer is missing",
 		})
 		return
 	}
@@ -49,7 +59,7 @@ func ChangePassword(c *gin.Context) {
 	if !repository.VerifyAnswer(email, question, answer) {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status": 401,
-			"error":  "email or answer is wrong",
+			"error":  "answer is wrong",
 		})
 		return
 	} else {
