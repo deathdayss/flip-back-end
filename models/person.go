@@ -11,6 +11,10 @@ type Person struct {
 	Password string `json:"password"`
 }
 
+func (Person) TableName() string {
+	return "person"
+}
+
 type LoginResult struct {
 	Token string `json:"token"`
 	Person
@@ -22,7 +26,7 @@ type UserClaims struct {
 }
 
 type PersonImg struct {
-	ID int `gorm:"primary_key;AUTO_INCREMENT"`
-	UID int `gorm:"uid; not null"`
+	ID  int    `gorm:"primary_key;AUTO_INCREMENT"`
+	UID int    `gorm:"uid; not null"`
 	URL string `gorm:"url; not null`
 }
