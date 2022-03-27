@@ -126,7 +126,6 @@ func ChangeDetail(email string, fieldName string, fieldVal string) error {
 	details := models.PersonDetail{Email: email}
 	if err := tx.Clauses(clause.Locking{
 		Strength: "UPDATE",
-		Options: "NOWAIT",
 	  }).Where("email=?", email).First(&details).Error; err != nil && err != gorm.ErrRecordNotFound {
 		  tx.Rollback()
 		  return err
