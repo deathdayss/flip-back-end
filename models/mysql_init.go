@@ -25,6 +25,10 @@ func InitMySql() *gorm.DB {
 	return sqlDB
 }
 
+func (db *Db) Close() {
+	db.MsClient.Close()
+}
+
 func (db *Db) AutoCreateTable() {
 	db.MsClient.AutoMigrate(&Person{})
 	db.MsClient.AutoMigrate(&Game{})
