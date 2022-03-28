@@ -1,8 +1,8 @@
 package models
 
 import (
-	"gorm.io/gorm"
-	"gorm.io/driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 )
 
 type Db struct {
@@ -35,11 +35,10 @@ func (db *Db) AutoCreateTable() {
 	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&Answer{})
 	//db.MsClient.Model(&Answer{}).AddIndex("user_id")
 	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&Like{})
-	//db.MsClient.Model(&Like{}).AddIndex("user_id", "game_id")
+	db.MsClient.Model(&Like{}).AddIndex("user_id", "game_id")
 	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&Collect{})
-	//db.MsClient.Model(&Collect{}).AddIndex("user_id", "game_id")
+	db.MsClient.Model(&Collect{}).AddIndex("user_id", "game_id")
 	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&PersonImg{})
-	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&PersonDetail{})
 	//db.MsClient.Model(&PersonImg{}).AddIndex("uid")
 	db.MsClient.AutoMigrate(&Code{})
 }
