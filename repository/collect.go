@@ -2,9 +2,8 @@ package repository
 
 import (
 	"strconv"
-
+	"gorm.io/gorm"
 	"github.com/deathdayss/flip-back-end/models"
-	"github.com/jinzhu/gorm"
 )
 
 func CollectOrUncollect(gid, uid string) error {
@@ -46,8 +45,8 @@ func IsCollectExist(gid, uid string, tx *gorm.DB) bool {
 	}
 }
 
-func GetCollectNum(gid string) (int, error) {
-	var count int
+func GetCollectNum(gid string) (int64, error) {
+	var count int64
 	err := models.DbClient.MsClient.Model(&models.Collect{}).Where("game_id = ?", gid).Count(&count).Error
 	if err != nil {
 		return 0, err

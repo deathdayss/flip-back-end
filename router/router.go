@@ -18,7 +18,9 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		userFeature.POST("/register", service.Register) // /v1/user/register
 		userFeature.POST("/login", service.Login)
-		userFeature.POST("/changepassword", service.ChangePassword)
+		userFeature.POST("/change/password", service.ChangePassword)
+		userFeature.GET("/detail", service.GetUserDetail)
+		userFeature.POST("/change/detail", service.ChangeDetail)
 	}
 	dataFeature := engine.Group("/v1/data")
 	dataFeature.Use(middleware.Auth())
