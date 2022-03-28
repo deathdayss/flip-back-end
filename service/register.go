@@ -1,6 +1,7 @@
 package service
 
 import (
+	"container/list"
 	"net/http"
 	"os"
 	"strings"
@@ -30,6 +31,59 @@ func Register(c *gin.Context) {
 		})
 		return
 	}
+
+	questionlist1 := list.New()
+	questionlist1.PushBack("sex")
+	questionlist1.PushBack("birth")
+	questionlist1.PushBack("phone")
+
+	questionlist2 := list.New()
+	questionlist2.PushBack("sex")
+	questionlist2.PushBack("birth")
+	questionlist2.PushBack("phone")
+
+	questionlist3 := list.New()
+	questionlist3.PushBack("sex")
+	questionlist3.PushBack("birth")
+	questionlist3.PushBack("phone")
+
+	c.JSON(http.StatusOK, gin.H{
+		"question1": questionlist1,
+		"question2": questionlist2,
+		"question3": questionlist3,
+	})
+
+	question1, ok4 := c.GetPostForm("question1")
+	answer1, ok5 := c.GetPostForm("answer1")
+	question2, ok6 := c.GetPostForm("question2")
+	answer2, ok7 := c.GetPostForm("answer2")
+	question3, ok8 := c.GetPostForm("question3")
+	answer3, ok9 := c.GetPostForm("answer3")
+
+	if !ok4 || !ok5 || !ok6 || !ok7 || !ok8 || !ok9 || len(answer1) == 0 || len(answer2) == 0 || len(answer3) == 0 {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "answer missing",
+		})
+		return
+	}
+
+	if !repository.CheckAnswer(email) {
+		_, err := repository.AddAnswer(email, question1, answer1, question2, answer2, question3, answer3)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"status": http.StatusBadRequest,
+				"error":  "cannot save answer",
+			})
+			return
+		} else {
+			c.JSON(http.StatusOK, gin.H{
+				"status":  200,
+				"message": "add answer successfully",
+			})
+		}
+	}
+
 	file, err := c.FormFile("file_body")
 	var fileType string = "default"
 	if err == nil {
@@ -38,7 +92,7 @@ func Register(c *gin.Context) {
 		if len(ss) < 2 || (strings.ToLower(ss[1]) != "jpg" && strings.ToLower(ss[1]) != "png") {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status": http.StatusBadRequest,
-				"error": "the img name is wrong",
+				"error":  "the img name is wrong",
 			})
 			return
 		}
@@ -46,10 +100,10 @@ func Register(c *gin.Context) {
 	}
 	saveName, err := repository.AddUser(email, password, nickname, fileType)
 	if saveName != "default.jpg" {
-		if _, err := os.Stat("./storage/personal/"+saveName); os.IsExist(err) {
+		if _, err := os.Stat("./storage/personal/" + saveName); os.IsExist(err) {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status": http.StatusBadRequest,
-				"error": "the user has been saved",
+				"error":  "the user has been saved",
 			})
 			return
 		}
@@ -63,7 +117,7 @@ func Register(c *gin.Context) {
 		if err := c.SaveUploadedFile(file, "./storage/personal/"+saveName); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status": http.StatusBadRequest,
-				"error": "the person id is wrong",
+				"error":  "the person id is wrong",
 			})
 			return
 		}

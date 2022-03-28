@@ -36,13 +36,25 @@ func ChangePassword(c *gin.Context) {
 		})
 	}
 
-	questionlist := list.New()
-	questionlist.PushBack("sex")
-	questionlist.PushBack("birth")
-	questionlist.PushBack("phone")
+	questionlist1 := list.New()
+	questionlist1.PushBack("sex")
+	questionlist1.PushBack("birth")
+	questionlist1.PushBack("phone")
+
+	questionlist2 := list.New()
+	questionlist2.PushBack("sex")
+	questionlist2.PushBack("birth")
+	questionlist2.PushBack("phone")
+
+	questionlist3 := list.New()
+	questionlist3.PushBack("sex")
+	questionlist3.PushBack("birth")
+	questionlist3.PushBack("phone")
 
 	c.JSON(http.StatusOK, gin.H{
-		"question": questionlist,
+		"question1": questionlist1,
+		"question2": questionlist2,
+		"question3": questionlist3,
 	})
 
 	question, ok2 := c.GetPostForm("question")

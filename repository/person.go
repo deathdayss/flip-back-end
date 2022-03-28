@@ -98,14 +98,42 @@ func FindAnswer(email string) (*models.Answer, error) {
 	return &a, nil
 }
 
+func CheckAnswer(email string) bool {
+	_, err := FindAnswer(email)
+	if err == nil {
+		return true
+	} else {
+		return false
+	}
+}
+
 func VerifyAnswer(email, question, answer string) bool {
 	a, err := FindAnswer(email)
 	if err != nil {
 		return false
 	} else {
-		if a.Question == question && a.Answer == answer {
+		if a.Question1 == question && a.Answer1 == answer || a.Question2 == question && a.Answer2 == answer || a.Question3 == question && a.Answer3 == answer {
 			return true
 		}
 		return false
 	}
+}
+
+func AddAnswer(email, question1, answer1, question2, answer2, question3, answer3 string) (string, error) {
+	a := models.Answer{
+		Email:     email,
+		Question1: question1,
+		Answer1:   answer1,
+		Question2: question2,
+		Answer2:   answer2,
+		Question3: question3,
+		Answer3:   answer3,
+	}
+	tx := models.DbClient.MsClient.Begin()
+	if err := tx.Create(&a).Error; err != nil {
+		tx.Rollback()
+		return "", err
+	}
+	tx.Commit()
+	return email, nil
 }
