@@ -122,8 +122,17 @@ func Register(c *gin.Context) {
 			return
 		}
 	}
+	token, err := generateToken(email)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": 401,
+			"msg":    "can not generate token",
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  200,
 		"message": "register successfully",
+		"token": token,
 	})
 }

@@ -163,7 +163,7 @@ func ChangeDetail(email string, fieldName string, fieldVal string) error {
 		age, _ := strconv.Atoi(fieldVal)
 		details.Age = age
 	} else {
-		pp := reflect.ValueOf(&details) // 取得struct变量的指针
+		pp := reflect.ValueOf(&details)
 		field := pp.Elem().FieldByName(fieldName)
 		field.SetString(fieldVal)
 	}

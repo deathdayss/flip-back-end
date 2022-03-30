@@ -11,13 +11,8 @@ type Person struct {
 	Password string `json:"password"`
 }
 
-func (Person) TableName() string {
-	return "person"
-}
-
 type LoginResult struct {
 	Token string `json:"token"`
-	Person
 }
 
 type UserClaims struct {

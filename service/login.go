@@ -24,13 +24,17 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-	p, err := repository.FindPerson(email)
+	token, err := generateToken(email)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"status": 404,
-			"error":  "no userinfo",
+		c.JSON(http.StatusOK, gin.H{
+			"status": 401,
+			"msg":    err.Error(),
 		})
 		return
 	}
-	generateToken(c, *p)
+	c.JSON(http.StatusOK, gin.H{
+		"status": 200,
+		"msg":    "login successfully",
+		"token":   token,
+	})
 }

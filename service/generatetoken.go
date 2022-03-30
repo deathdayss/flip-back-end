@@ -1,7 +1,6 @@
 package service
 
 import (
-	"log"
 	"net/http"
 	"time"
 
@@ -11,12 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func generateToken(c *gin.Context, p models.Person) {
+func generateToken(email string) (string, error) {
 	j := &middleware.JWT{
 		[]byte("flip"),
 	}
 	claims := models.UserClaims{
-		Email: p.Email,
+		Email: email,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,    // 签名生效时间
 			ExpiresAt: time.Now().Unix() + 60*60*2, // 过期时间 2h
@@ -25,27 +24,7 @@ func generateToken(c *gin.Context, p models.Person) {
 	}
 
 	token, err := j.GenerateToken(claims)
-
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"status": 401,
-			"msg":    err.Error(),
-		})
-		return
-	}
-
-	log.Println(token)
-
-	data := models.LoginResult{
-		Person: p,
-		Token:  token,
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"status": 200,
-		"msg":    "login successfully",
-		"data":   data,
-	})
-	return
+	return token, err
 }
 
 func GetDataByTime(c *gin.Context) {

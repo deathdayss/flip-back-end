@@ -33,7 +33,7 @@ func Auth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		c.Set("claims", claims)
+		c.Set("email", claims.Email)
 	}
 }
 

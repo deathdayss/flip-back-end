@@ -9,22 +9,15 @@ import (
 )
 
 func GetUserDetail(c *gin.Context) {
-	email, ok1 := c.GetQuery("email")
-	password, ok2 := c.GetQuery("password")
-	if !ok1 || !ok2 {
-		c.JSON(http.StatusNotAcceptable, gin.H{
-			"status": 406,
-			"error":  "email or password is missing",
-		})
-		return
-	}
-	if !repository.VerifyPerson(email, password) {
+	emailIt, ok := c.Get("email")
+	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status": 401,
-			"error":  "email or password is wrong",
+			"error":  "unauth token",
 		})
 		return
 	}
+	email := emailIt.(string)
 	detail, err := repository.GetUserDetail(email)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
@@ -46,22 +39,15 @@ func GetUserDetail(c *gin.Context) {
 }
 var allowedField map[string]bool = map[string]bool{"Age":true, "Gender":true, "Birth":true}
 func ChangeDetail(c *gin.Context) {
-	email, ok1 := c.GetPostForm("email")
-	password, ok2 := c.GetPostForm("password")
-	if !ok1 || !ok2 {
-		c.JSON(http.StatusNotAcceptable, gin.H{
-			"status": 406,
-			"error":  "email or password is missing",
-		})
-		return
-	}
-	if !repository.VerifyPerson(email, password) {
+	emailIt, ok := c.Get("email")
+	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status": 401,
-			"error":  "email or password is wrong",
+			"error":  "unauth token",
 		})
 		return
 	}
+	email := emailIt.(string)
 	fieldName, ok3 := c.GetPostForm("FieldKey")
 	if !allowedField[fieldName] || !ok3 {
 		c.JSON(http.StatusUnauthorized, gin.H{

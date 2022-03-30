@@ -1,0 +1,40 @@
+"filename", "language", "Go", "Markdown", "Go Checksum File", "Go Module File", "XML", "comment", "blank", "total"
+"d:\Go\comp8715\flip-back-end\.idea\flip-back-end.iml", "XML", 0, 0, 0, 0, 9, 0, 0, 9
+"d:\Go\comp8715\flip-back-end\.idea\modules.xml", "XML", 0, 0, 0, 0, 8, 0, 0, 8
+"d:\Go\comp8715\flip-back-end\.idea\vcs.xml", "XML", 0, 0, 0, 0, 6, 0, 0, 6
+"d:\Go\comp8715\flip-back-end\README.md", "Markdown", 0, 1, 0, 0, 0, 0, 0, 1
+"d:\Go\comp8715\flip-back-end\dto\person_detail.go", "Go", 7, 0, 0, 0, 0, 0, 1, 8
+"d:\Go\comp8715\flip-back-end\dto\rank_list.go", "Go", 10, 0, 0, 0, 0, 0, 1, 11
+"d:\Go\comp8715\flip-back-end\go.mod", "Go Module File", 0, 0, 0, 9, 0, 0, 3, 12
+"d:\Go\comp8715\flip-back-end\go.sum", "Go Checksum File", 0, 0, 86, 0, 0, 0, 1, 87
+"d:\Go\comp8715\flip-back-end\main.go", "Go", 16, 0, 0, 0, 0, 0, 4, 20
+"d:\Go\comp8715\flip-back-end\middleware\cors.go", "Go", 19, 0, 0, 0, 0, 0, 5, 24
+"d:\Go\comp8715\flip-back-end\middleware\jwt.go", "Go", 100, 0, 0, 0, 0, 0, 12, 112
+"d:\Go\comp8715\flip-back-end\models\answer.go", "Go", 11, 0, 0, 0, 0, 0, 2, 13
+"d:\Go\comp8715\flip-back-end\models\collect.go", "Go", 6, 0, 0, 0, 0, 0, 2, 8
+"d:\Go\comp8715\flip-back-end\models\game.go", "Go", 12, 0, 0, 0, 0, 0, 1, 13
+"d:\Go\comp8715\flip-back-end\models\like.go", "Go", 6, 0, 0, 0, 0, 0, 1, 7
+"d:\Go\comp8715\flip-back-end\models\mysql_init.go", "Go", 29, 0, 0, 0, 0, 5, 8, 42
+"d:\Go\comp8715\flip-back-end\models\person.go", "Go", 28, 0, 0, 0, 0, 0, 6, 34
+"d:\Go\comp8715\flip-back-end\models\verificationCode.go", "Go", 6, 0, 0, 0, 0, 0, 2, 8
+"d:\Go\comp8715\flip-back-end\repository\collect.go", "Go", 52, 0, 0, 0, 0, 0, 6, 58
+"d:\Go\comp8715\flip-back-end\repository\game.go", "Go", 111, 0, 0, 0, 0, 0, 8, 119
+"d:\Go\comp8715\flip-back-end\repository\like.go", "Go", 52, 0, 0, 0, 0, 0, 6, 58
+"d:\Go\comp8715\flip-back-end\repository\person.go", "Go", 160, 0, 0, 0, 0, 0, 18, 178
+"d:\Go\comp8715\flip-back-end\repository\userinfo.go", "Go", 18, 0, 0, 0, 0, 0, 4, 22
+"d:\Go\comp8715\flip-back-end\repository\verificationCode.go", "Go", 10, 0, 0, 0, 0, 0, 3, 13
+"d:\Go\comp8715\flip-back-end\router\router.go", "Go", 76, 0, 0, 0, 0, 2, 6, 84
+"d:\Go\comp8715\flip-back-end\service\changepassword.go", "Go", 91, 0, 0, 0, 0, 0, 18, 109
+"d:\Go\comp8715\flip-back-end\service\collect.go", "Go", 58, 0, 0, 0, 0, 0, 6, 64
+"d:\Go\comp8715\flip-back-end\service\detail.go", "Go", 75, 0, 0, 0, 0, 0, 3, 78
+"d:\Go\comp8715\flip-back-end\service\download.go", "Go", 106, 0, 0, 0, 0, 0, 5, 111
+"d:\Go\comp8715\flip-back-end\service\generatetoken.go", "Go", 34, 0, 0, 0, 0, 0, 6, 40
+"d:\Go\comp8715\flip-back-end\service\getVerificationCode.go", "Go", 23, 0, 0, 0, 0, 2, 8, 33
+"d:\Go\comp8715\flip-back-end\service\get_ranking.go", "Go", 43, 0, 0, 0, 0, 5, 4, 52
+"d:\Go\comp8715\flip-back-end\service\get_ranking_download.go", "Go", 43, 0, 0, 0, 0, 5, 5, 53
+"d:\Go\comp8715\flip-back-end\service\get_userinfo.go", "Go", 44, 0, 0, 0, 0, 0, 7, 51
+"d:\Go\comp8715\flip-back-end\service\like.go", "Go", 58, 0, 0, 0, 0, 0, 4, 62
+"d:\Go\comp8715\flip-back-end\service\login.go", "Go", 37, 0, 0, 0, 0, 0, 4, 41
+"d:\Go\comp8715\flip-back-end\service\register.go", "Go", 127, 0, 0, 0, 0, 0, 12, 139
+"d:\Go\comp8715\flip-back-end\service\upload.go", "Go", 170, 0, 0, 0, 0, 0, 9, 179
+"Total", "-", 1638, 1, 86, 9, 23, 19, 191, 1967
