@@ -31,12 +31,12 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	dataFeature := engine.Group("/v1/data")
 	dataFeature.Use(middleware.Auth())
 	{
-		dataFeature.Use(middleware.Auth())
+		//dataFeature.Use(middleware.Auth())
 		dataFeature.GET("/datebytime", service.GetDataByTime)
 	}
 	rankFeature := engine.Group("/v1/rank")
 	{
-		rankFeature.Use(middleware.Auth())
+		//rankFeature.Use(middleware.Auth())
 		rankFeature.GET("/zone", service.GetGameRanking)
 		rankFeature.GET("/download", service.GetGameRankingDownloading)
 	}
@@ -47,7 +47,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	}
 	downloadFeature := engine.Group("/v1/download")
 	{
-		downloadFeature.Use(middleware.Auth())
+		//downloadFeature.Use(middleware.Auth())
 		downloadFeature.GET("/img", service.DownloadImg)
 		downloadFeature.GET("/game", service.DownloadGame)
 		downloadFeature.GET("/personal", service.DownloadPersonal)
