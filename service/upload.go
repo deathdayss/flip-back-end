@@ -14,15 +14,15 @@ import (
 
 var ProcessMap sync.Map = sync.Map{}
 func UploadZip(c *gin.Context) {
-	email, ok1 := c.GetPostForm("email")
-	password, ok2 := c.GetPostForm("password")
-	if !ok1 || !ok2 || !repository.VerifyPerson(email, password) {
-		c.JSON(http.StatusForbidden, gin.H{
-			"status": http.StatusForbidden,
-			"error" : "email or password or game is wrong",
+	emailIt, ok := c.Get("email")
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status": 401,
+			"error":  "unauth token",
 		})
 		return
 	}
+	email := emailIt.(string)
 	file, err := c.FormFile("file_body")
 	if err != nil {
 		c.JSON(http.StatusNoContent, gin.H{
@@ -89,13 +89,20 @@ func timeout(c chan bool) bool {
 }
 
 func UploadInfo(c *gin.Context) {
-	email, ok1 := c.GetPostForm("email")
-	password, ok2 := c.GetPostForm("password")
+	emailIt, ok := c.Get("email")
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status": 401,
+			"error":  "unauth token",
+		})
+		return
+	}
+	email := emailIt.(string)
 	gameID, ok3 := c.GetPostForm("game_id")
 	gameName, ok4 := c.GetPostForm("game_name")
 	zone, ok5 := c.GetPostForm("zone")
 
-	if !ok1 || !ok2 || !ok3 || !ok4 || !ok5 || !repository.VerifyPerson(email, password) || !repository.VerifyGame(gameID) {
+	if !ok3 || !ok4 || !ok5 || !repository.VerifyGame(gameID) {
 		c.JSON(http.StatusForbidden, gin.H{
 			"status": http.StatusForbidden,
 			"error" : "email or password or game is wrong",
