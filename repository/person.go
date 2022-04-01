@@ -9,6 +9,13 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+func Email2PID(email string) (int, error) {
+	p, err := FindPerson(email)
+	if err != nil {
+		return -1, err
+	}
+	return p.ID, nil
+}
 func CheckExistence(email string) bool {
 	_, err := FindPerson(email)
 	if err == nil {
