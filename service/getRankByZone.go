@@ -28,9 +28,9 @@ func GetGameRankingByZone(c *gin.Context) {
 		return
 	}
 
-	rankList := []dto.RankItem{}
+	rankList := []dto.RankItemByZone{}
 	for _, ri := range *rankInfo {
-		rankList = append(rankList, dto.RankItem{
+		rankList = append(rankList, dto.RankItemByZone{
 			ID:          ri.ID,
 			Name:        ri.Name,
 			LikeNum:     ri.LikeNum,
@@ -38,6 +38,7 @@ func GetGameRankingByZone(c *gin.Context) {
 			CommentNum:  ri.CommentNum,
 			Img:         ri.ImgUrl,
 			AuthorName:  repository.FindNickName(ri.UID),
+			ClickCount:  repository.GetGameClick(ri.ID),
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{

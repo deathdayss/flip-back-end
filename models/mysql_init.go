@@ -19,8 +19,8 @@ func (db *Db) Init() {
 }
 
 func InitMySql() *gorm.DB {
-	//config := "root:123456@tcp(localhost:3306)/comp"
-	config := "root:Cptbtptp1790340626.@tcp(localhost:3306)/comp?parseTime=true&loc=Local"
+	config := "root:123456@tcp(localhost:3306)/comp"
+	//config := "root:Cptbtptp1790340626.@tcp(localhost:3306)/comp?parseTime=true&loc=Local"
 	sqlDB, _ := gorm.Open(mysql.Open(config), &gorm.Config{})
 
 	return sqlDB
@@ -41,4 +41,5 @@ func (db *Db) AutoCreateTable() {
 	db.MsClient.AutoMigrate(&Comment{})
 	db.MsClient.AutoMigrate(&GameRescale{})
 	db.MsClient.AutoMigrate(&Zone{})
+	db.MsClient.AutoMigrate(&Click{})
 }

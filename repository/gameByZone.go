@@ -6,6 +6,15 @@ import (
 	"github.com/deathdayss/flip-back-end/models"
 )
 
+func GetGameClick(id int) int {
+	c := models.Click{}
+	if err := models.DbClient.MsClient.Where("game_id = ?", id).First(&c).Error; err != nil {
+		return 0
+	} else {
+		return c.Count
+	}
+}
+
 func GetGameRankingByZone(zone string, num int) (*[]models.GameRescale, error) {
 	result := []models.GameRescale{}
 
