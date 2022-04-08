@@ -1,7 +1,6 @@
 package service
 
 import (
-	"container/list"
 	"net/http"
 	"strings"
 
@@ -35,15 +34,6 @@ func ChangePassword(c *gin.Context) {
 			"message": "email exists",
 		})
 	}
-
-	questionlist := list.New()
-	questionlist.PushBack("sex")
-	questionlist.PushBack("birth")
-	questionlist.PushBack("phone")
-
-	c.JSON(http.StatusOK, gin.H{
-		"question": questionlist,
-	})
 
 	question, ok2 := c.GetPostForm("question")
 	answer, ok3 := c.GetPostForm("answer")
