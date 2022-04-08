@@ -27,6 +27,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		userFeature.POST("/change/password", service.ChangePassword)
 		userFeature.GET("/detail", service.GetUserDetail)
 		userFeature.POST("/change/detail", service.ChangeDetail)
+
 	}
 	dataFeature := engine.Group("/v1/data")
 	dataFeature.Use(middleware.Auth())
@@ -86,5 +87,10 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		ChangeCommentFeature.Use(middleware.Auth())
 		ChangeCommentFeature.POST("/add", service.AddComment)
 	}
+	SecurityQuestionFeature := engine.Group("/v1/sequrity")
+	{
+		SecurityQuestionFeature.GET("/question", service.GetSecurityQuestion)
+	}
+
 	return engine
 }
