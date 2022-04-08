@@ -39,6 +39,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		//rankFeature.Use(middleware.Auth())
 		rankFeature.GET("/zone", service.GetGameRanking)
 		rankFeature.GET("/download", service.GetGameRankingDownloading)
+		rankFeature.GET("/author", service.GetAurthorRankingByZone)
 		//newRank Settings
 		rankFeature.GET("/multi_zone", service.GetGameRankingByZone)
 	}

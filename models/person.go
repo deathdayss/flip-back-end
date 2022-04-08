@@ -27,8 +27,14 @@ type PersonImg struct {
 }
 
 type PersonDetail struct {
-	Email string `gorm:"email; not null; unique"`
-	Birth string `gorm:"birth"`
-	Age int `gorm:"age"`
+	Email  string `gorm:"email; not null; unique"`
+	Birth  string `gorm:"birth"`
+	Age    int    `gorm:"age"`
 	Gender string `gorm: "gender"`
+}
+
+type Author struct {
+	URL      string `gorm:"url; not null`
+	NickName string `json:"nickname"`
+	LikeNum  int    `json:"like_num"`
 }
