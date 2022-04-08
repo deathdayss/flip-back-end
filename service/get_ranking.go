@@ -9,6 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary get game according to the like number in the same zone
+// @Description get game according to the like number in the same zone
+// @Accept  plain
+// @Produce  json
+// @Param   num     header    int     true        "the number of the return itme"
+// @Param   zone     header    int     true        "the zone"
+// @Success 200 {array} dto.RankItem   "{"status":200, "List":list}"
+// @Router /v1/rank/zone [GET]
 func GetGameRanking(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	zone := c.Query("zone")

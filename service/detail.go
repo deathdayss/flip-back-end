@@ -8,6 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary get a user's detail
+// @Description get a user's detail
+// @Accept  plain
+// @Produce  json
+// @Param   token     header    string     true        "token"
+// @Success 200 {object} dto.PersonDetail   "{"status":200, "detail":detail}"
+// @Router /v1/user/change/detail [POST]
 func GetUserDetail(c *gin.Context) {
 	emailIt, ok := c.Get("email")
 	if !ok {
@@ -38,6 +45,15 @@ func GetUserDetail(c *gin.Context) {
 	})
 }
 var allowedField map[string]bool = map[string]bool{"Age":true, "Gender":true, "Birth":true}
+// @Summary get a user's detail
+// @Description get a user's detail
+// @Accept  plain
+// @Produce  json
+// @Param   token     header    string     true        "token"
+// @Param   FieldKey     body    string     true        "the attribute to be modified"
+// @Param   FieldVal     body    string     true        "the attribute value to be modified"
+// @Success 200 {json} string   "{"status":200, "msg": "set successfully"}"
+// @Router /v1/user/detail [POST]
 func ChangeDetail(c *gin.Context) {
 	emailIt, ok := c.Get("email")
 	if !ok {

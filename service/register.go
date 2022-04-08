@@ -10,6 +10,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary register a new account
+// @Description using password, email and nickname to create a new account
+// @Accept  plain
+// @Produce  json
+// @Param   email     body    string     true        "email"
+// @Param   password     body    string     true        "password"
+// @Param   nickname     body    string     true        "nickname"
+// @Param   file_body     body    string     false        "person image"
+// @Success 200 {string} json   "{"status":200, "msg":"register successfully":, token":"string"}"
+// @Failure 406 {string} json	"email has been used"
+// @Failure 406 {string} json	"email, nickname or password is missing"
+// @Failure 400 {string} json	"cannot save answer"
+// @Failure 401 {string} json	"can not generate token"
+// @Router /v1/notoken/register [post]
 func Register(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
 	password, ok2 := c.GetPostForm("password")
@@ -124,7 +138,7 @@ func Register(c *gin.Context) {
 	}
 	token, err := generateToken(email)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusUnauthorized, gin.H{
 			"status": 401,
 			"msg":    "can not generate token",
 		})

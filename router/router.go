@@ -7,7 +7,17 @@ import (
 	"github.com/deathdayss/flip-back-end/service"
 	"github.com/gin-gonic/gin"
 )
+import "github.com/swaggo/gin-swagger" // gin-swagger middleware
+import "github.com/swaggo/files" // swagger embed files
 
+// @title           FLIP backend API
+// @version         1.0
+// @description     FLIP backend server.
+// @termsOfService  http://swagger.io/terms/
+
+// @host      localhost:8084
+
+// @securityDefinitions.basic  JWT
 func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Engine {
 	engine.Use(gin.Recovery())
 	engine.Use(middlewares...)
@@ -83,5 +93,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		ChangeCommentFeature.Use(middleware.Auth())
 		ChangeCommentFeature.POST("/add", service.AddComment)
 	}
+	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	engine.Run(":8080")
 	return engine
 }

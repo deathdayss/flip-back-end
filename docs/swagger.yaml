@@ -1,0 +1,264 @@
+definitions:
+  dto.PersonDetail:
+    properties:
+      age:
+        type: integer
+      birth:
+        type: string
+      email:
+        type: string
+      gender:
+        type: string
+    type: object
+  dto.RankItem:
+    properties:
+      GID:
+        type: integer
+      authorName:
+        type: string
+      commentNum:
+        type: integer
+      downloadNum:
+        type: integer
+      game_name:
+        type: string
+      img:
+        type: string
+      like_num:
+        type: integer
+    type: object
+host: localhost:8084
+info:
+  contact: {}
+  description: FLIP backend server.
+  termsOfService: http://swagger.io/terms/
+  title: FLIP backend API
+  version: "1.0"
+paths:
+  /v1/download/game:
+    get:
+      consumes:
+      - text/plain
+      description: get a game, return a zip
+      parameters:
+      - description: the game's id
+        in: header
+        name: game_id
+        required: true
+        type: integer
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: ""
+      summary: get a game
+  /v1/download/img:
+    get:
+      consumes:
+      - text/plain
+      description: get a game's image
+      parameters:
+      - description: the image name
+        in: header
+        name: img_name
+        required: true
+        type: string
+      produces:
+      - image/png
+      responses:
+        "200":
+          description: ""
+      summary: get a game's image
+  /v1/download/personal:
+    get:
+      consumes:
+      - text/plain
+      description: get a person's image
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - image/png
+      responses:
+        "200":
+          description: ""
+      summary: get a person's image
+  /v1/notoken/login:
+    post:
+      consumes:
+      - text/plain
+      description: using password, email and nickname to create a new account
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "msg":"register successfully":, token":"string"}'
+          schema:
+            type: string
+      summary: log in a account
+  /v1/notoken/register:
+    post:
+      consumes:
+      - text/plain
+      description: using password, email and nickname to create a new account
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      - description: nickname
+        in: body
+        name: nickname
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "msg":"register successfully":, token":"string"}'
+          schema:
+            type: string
+        "400":
+          description: cannot save answer
+          schema:
+            type: string
+        "401":
+          description: can not generate token
+          schema:
+            type: string
+        "406":
+          description: email, nickname or password is missing
+          schema:
+            type: string
+      summary: register a new account
+  /v1/rank/download:
+    get:
+      consumes:
+      - text/plain
+      description: get game according to the download number in the same zone
+      parameters:
+      - description: the number of the return itme
+        in: header
+        name: num
+        required: true
+        type: integer
+      - description: the zone
+        in: header
+        name: zone
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "List":list}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.RankItem'
+            type: array
+      summary: get game according to the download number in the same zone
+  /v1/rank/zone:
+    get:
+      consumes:
+      - text/plain
+      description: get game according to the like number in the same zone
+      parameters:
+      - description: the number of the return itme
+        in: header
+        name: num
+        required: true
+        type: integer
+      - description: the zone
+        in: header
+        name: zone
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "List":list}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.RankItem'
+            type: array
+      summary: get game according to the like number in the same zone
+  /v1/user/change/detail:
+    post:
+      consumes:
+      - text/plain
+      description: get a user's detail
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "detail":detail}'
+          schema:
+            $ref: '#/definitions/dto.PersonDetail'
+      summary: get a user's detail
+  /v1/user/detail:
+    post:
+      consumes:
+      - text/plain
+      description: get a user's detail
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: the attribute to be modified
+        in: body
+        name: FieldKey
+        required: true
+        schema:
+          type: string
+      - description: the attribute value to be modified
+        in: body
+        name: FieldVal
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "msg": "set successfully"}'
+          schema:
+            type: json
+      summary: get a user's detail
+securityDefinitions:
+  JWT:
+    type: basic
+swagger: "2.0"

@@ -10,6 +10,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary get a game
+// @Description get a game, return a zip
+// @Accept  plain
+// @Produce  octet-stream
+// @Param   game_id     header    int     true        "the game's id"
+// @Success 200 
+// @Router /v1/download/game [GET]
 func DownloadGame(c *gin.Context) {
 	gid := c.Query("game_id")
 	game, err := repository.GetGame(gid)
@@ -32,6 +39,13 @@ func DownloadGame(c *gin.Context) {
 	c.File("./storage/game/"+game.FileUrl)
 }
 
+// @Summary get a person's image
+// @Description get a person's image
+// @Accept  plain
+// @Produce  png
+// @Param   token     header    string     true        "token"
+// @Success 200 
+// @Router /v1/download/personal [GET]
 func DownloadPersonal(c *gin.Context) {
 	emailIt, ok := c.Get("email")
 	if !ok {
@@ -76,6 +90,13 @@ func DownloadPersonal(c *gin.Context) {
 	c.File("./storage/personal/"+filename)
 }
 
+// @Summary get a game's image
+// @Description get a game's image
+// @Accept  plain
+// @Produce  png
+// @Param   img_name     header    string     true        "the image name"
+// @Success 200 
+// @Router /v1/download/img [GET]
 func DownloadImg(c *gin.Context) {
 	filename := c.Query("img_name")
 	ss := strings.Split(filename, ".")

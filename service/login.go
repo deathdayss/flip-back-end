@@ -7,6 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary log in a account
+// @Description using password, email and nickname to create a new account
+// @Accept  plain
+// @Produce  json
+// @Param   email     body    string     true        "email"
+// @Param   password     body    string     true        "password"
+// @Success 200 {string} json   "{"status":200, "msg":"register successfully":, token":"string"}"
+// @Router /v1/notoken/login [post]
 func Login(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
 	password, ok2 := c.GetPostForm("password")
