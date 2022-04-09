@@ -36,6 +36,7 @@ func (db *Db) AutoCreateTable() {
 	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&Collect{})
 	//db.MsClient.Model(&Collect{}).AddIndex("user_id", "game_id")
 	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&PersonImg{})
+	db.MsClient.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&CommentUp{})
 	//db.MsClient.Model(&PersonImg{}).AddIndex("uid")
 	db.MsClient.AutoMigrate(&Code{})
 	db.MsClient.AutoMigrate(&Comment{})

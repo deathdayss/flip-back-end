@@ -28,7 +28,14 @@ func AddComment(content string, gid, uid int) error {
 	return nil
 }
 
-func UpComment(cid int) error {
+func UpComment(cid int, uid int) error {
+	cu := &models.CommentUp{
+		CID: cid,
+		UID: uid,
+	}
+	if err := models.DbClient.MsClient.Model(cu).Create(cu).Error; err != nil {
+		return err
+	}
 	cm := models.Comment{
 		ID: cid,
 	}
@@ -46,4 +53,25 @@ func DownComment(cid int) error {
 		return err
 	}
 	return nil
+}
+
+func GetCommentRanking(gid string, num int) (*[]models.Comment, error) {
+	result := []models.Comment{}
+	err := models.DbClient.MsClient.Where("g_id = ?", gid).
+		Order("create_time DESC"). // order by create_time DESC
+		Limit(num). // limit num
+		Find(&result).Error
+	if err != nil {
+		return nil, err
+	}
+	actualLen := len(result)
+	if actualLen == 0 {
+		return nil, errors.New("No data")
+	}
+	if actualLen < num {
+		for i := actualLen; i < num; i++ {
+			result = append(result, result[i%actualLen])
+		}
+	}
+	return &result, nil
 }

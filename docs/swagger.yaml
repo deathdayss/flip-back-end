@@ -136,6 +136,11 @@ paths:
         required: true
         schema:
           type: string
+      - description: person image
+        in: body
+        name: file_body
+        schema:
+          type: string
       produces:
       - application/json
       responses:

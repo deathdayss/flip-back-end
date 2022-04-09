@@ -11,3 +11,8 @@ type Comment struct {
 	Up int
 	Down int
 }
+
+type CommentUp struct {
+	CID        int `gorm:"not null;primaryKey"`
+	UID int `gorm:"not null;primaryKey"`
+}

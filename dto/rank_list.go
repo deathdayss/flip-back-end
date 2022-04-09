@@ -9,3 +9,12 @@ type RankItem struct {
 	Img string `json:"img"`
 	AuthorName string `json:author_name`
 }
+
+type RankComment struct {
+	ID int `json:"CID"`
+	Comment string `json:"comment"`
+	LikeNum int `json:"like_num"`
+	CreateTime string `json:"create_time"`
+	GID int `json:"GID"`
+	UID int `json:"UID"`
+}

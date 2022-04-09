@@ -92,8 +92,13 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		ChangeCommentFeature.Use(middleware.Auth())
 		ChangeCommentFeature.POST("/add", service.AddComment)
+		ChangeCommentFeature.POST("/up", service.UpComment)
+	}
+	ShowCommentFeature := engine.Group("/v1/rank/comment")
+	{
+		ShowCommentFeature.GET("/time", service.GetCommentRanking)
 	}
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	engine.Run(":8080")
+	engine.Run(":8084")
 	return engine
 }
