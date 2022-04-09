@@ -1,8 +1,8 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type Db struct {
@@ -19,10 +19,10 @@ func (db *Db) Init() {
 }
 
 func InitMySql() *gorm.DB {
-
+	//config := "root:19960822@tcp(localhost:3306)/comp"
 	config := "root:Cptbtptp1790340626.@tcp(localhost:3306)/comp?parseTime=true&loc=Local"
 	sqlDB, _ := gorm.Open(mysql.Open(config), &gorm.Config{})
-	//sqlDB, _ := gorm.Open("mysql", "root:123456@tcp(localhost:3306)/comp")
+
 	return sqlDB
 }
 
@@ -40,4 +40,7 @@ func (db *Db) AutoCreateTable() {
 	//db.MsClient.Model(&PersonImg{}).AddIndex("uid")
 	db.MsClient.AutoMigrate(&Code{})
 	db.MsClient.AutoMigrate(&Comment{})
+	db.MsClient.AutoMigrate(&GameRescale{})
+	db.MsClient.AutoMigrate(&Zone{})
+	db.MsClient.AutoMigrate(&Click{})
 }

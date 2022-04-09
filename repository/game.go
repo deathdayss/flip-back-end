@@ -13,10 +13,10 @@ func AddGame(name, email, imgUrl, fileUrl, zone string) (int, error) {
 	}
 	uid := author.ID
 	g := models.Game{
-		Name:   name,
-		ImgUrl: imgUrl,
-		UID:    uid,
-		Zone:   zone,
+		Name:    name,
+		ImgUrl:  imgUrl,
+		UID:     uid,
+		Zone:    zone,
 		FileUrl: fileUrl,
 	}
 	if err := models.DbClient.MsClient.Create(&g).Error; err != nil {
@@ -36,7 +36,7 @@ func DeleteGame(id int) error {
 }
 func UpdateGameFileUrl(id int, fileUrl string) error {
 	g := models.Game{
-		ID: id,
+		ID:      id,
 		FileUrl: fileUrl,
 	}
 	if err := models.DbClient.MsClient.Model(&models.Game{}).Save(&g).Error; err != nil {
@@ -46,11 +46,11 @@ func UpdateGameFileUrl(id int, fileUrl string) error {
 }
 func UpdateGameByID(id int, name, imgUrl, zone string, uid int) error {
 	g := models.Game{
-		ID: id,
-		Name: name,
+		ID:     id,
+		Name:   name,
 		ImgUrl: imgUrl,
-		Zone: zone,
-		UID: uid,
+		Zone:   zone,
+		UID:    uid,
 	}
 	if err := models.DbClient.MsClient.Model(&models.Game{}).Save(&g).Error; err != nil {
 		return err
@@ -79,7 +79,7 @@ func GetGameRanking(zone string, num int) (*[]models.Game, error) {
 	result := []models.Game{}
 	err := models.DbClient.MsClient.Where("zone = ?", zone).
 		Order("like_num DESC"). // order by like_num DESC
-		Limit(num). // limit num
+		Limit(num).             // limit num
 		Find(&result).Error
 	if err != nil {
 		return nil, err

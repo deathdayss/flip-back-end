@@ -1,7 +1,6 @@
 package service
 
 import (
-	"container/list"
 	"net/http"
 	"os"
 	"strings"
@@ -45,27 +44,6 @@ func Register(c *gin.Context) {
 		})
 		return
 	}
-
-	questionlist1 := list.New()
-	questionlist1.PushBack("sex")
-	questionlist1.PushBack("birth")
-	questionlist1.PushBack("phone")
-
-	questionlist2 := list.New()
-	questionlist2.PushBack("sex")
-	questionlist2.PushBack("birth")
-	questionlist2.PushBack("phone")
-
-	questionlist3 := list.New()
-	questionlist3.PushBack("sex")
-	questionlist3.PushBack("birth")
-	questionlist3.PushBack("phone")
-
-	c.JSON(http.StatusOK, gin.H{
-		"question1": questionlist1,
-		"question2": questionlist2,
-		"question3": questionlist3,
-	})
 
 	question1, ok4 := c.GetPostForm("question1")
 	answer1, ok5 := c.GetPostForm("answer1")
@@ -147,6 +125,6 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  200,
 		"message": "register successfully",
-		"token": token,
+		"token":   token,
 	})
 }

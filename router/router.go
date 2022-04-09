@@ -37,6 +37,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		userFeature.POST("/change/password", service.ChangePassword)
 		userFeature.GET("/detail", service.GetUserDetail)
 		userFeature.POST("/change/detail", service.ChangeDetail)
+
 	}
 	dataFeature := engine.Group("/v1/data")
 	dataFeature.Use(middleware.Auth())
@@ -49,6 +50,9 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		//rankFeature.Use(middleware.Auth())
 		rankFeature.GET("/zone", service.GetGameRanking)
 		rankFeature.GET("/download", service.GetGameRankingDownloading)
+		rankFeature.GET("/author", service.GetAurthorRankingByZone)
+		//newRank Settings
+		rankFeature.GET("/multi_zone", service.GetGameRankingByZone)
 	}
 	userinfoFeature := engine.Group("/v1/info")
 	{
@@ -97,6 +101,10 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	ShowCommentFeature := engine.Group("/v1/rank/comment")
 	{
 		ShowCommentFeature.GET("/time", service.GetCommentRanking)
+	}
+	SecurityQuestionFeature := engine.Group("/v1/sequrity")
+	{
+		SecurityQuestionFeature.GET("/question", service.GetSecurityQuestion)
 	}
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	engine.Run(":8084")
