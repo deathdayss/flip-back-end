@@ -9,8 +9,8 @@ import (
 func GetAuthorRankingByZone(zone string, num int) (*[]models.Author, error) {
 	result := []models.Author{}
 
-	err := models.DbClient.MsClient.Model(&models.Game{}).
-		Select("url", "nickname", "sum(like_num)").
+	err := models.DbClient.MsClient.Debug().Table("games").
+		Select("url", "nickname", "sum(like_num) as sum_like_num").
 		Joins("left join person on games.uid = person.id").
 		Joins("join person_imgs on games.uid = person_imgs.uid").Where("zone=?", zone).
 		Group("games.uid").

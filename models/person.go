@@ -35,6 +35,6 @@ type PersonDetail struct {
 
 type Author struct {
 	URL      string `gorm:"url; not null`
-	NickName string `json:"nickname"`
-	LikeNum  int    `json:"like_num"`
+	NickName string `gorm:"nickname"`
+	LikeNum  int    `gorm:"sum_like_num"`
 }
