@@ -22,7 +22,6 @@ import (
 // @Param   confirm     body    string     true        "confirm"
 // @Success 200 {json} string   "{"status":200, "message":update successfully}"
 // @Router /v1/notoken/change/password [POST]
-
 func ChangePassword(c *gin.Context) {
 
 	email, ok1 := c.GetPostForm("email")

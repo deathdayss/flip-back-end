@@ -15,9 +15,8 @@ import (
 // @Produce  json
 // @Param   num     header    int     true        "num"
 // @Param   zone     header    string     true        "zone"
-// @Success 200 {array} dto.AuthorList "{"status":200, "detail":ranklist}"
+// @Success 200 {array} dto.AuthorItem "{"status":200, "list":ranklist}"
 // @Router /v1/rank/author  [GET]
-
 func GetAurthorRankingByZone(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	zone := c.Query("zone")

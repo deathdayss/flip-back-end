@@ -95,6 +95,73 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/notoken/change/password": {
+            "post": {
+                "description": "change a user's password",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "vertify a user's email and change password",
+                "parameters": [
+                    {
+                        "description": "email",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "question",
+                        "name": "question",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "answer",
+                        "name": "answer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "newpwd",
+                        "name": "newpwd",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "confirm",
+                        "name": "confirm",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"message\":update successfully}",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/notoken/login": {
             "post": {
                 "description": "using password, email and nickname to create a new account",
@@ -264,6 +331,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/rank/author": {
+            "get": {
+                "description": "get anuthor rank by zone",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get anuthor rank by zone",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "num",
+                        "name": "num",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "zone",
+                        "name": "zone",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"list\":ranklist}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.AuthorItem"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/rank/download": {
             "get": {
                 "description": "get game according to the download number in the same zone",
@@ -395,6 +501,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/sequrity/question": {
+            "get": {
+                "description": "get security question list",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get security question list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "num",
+                        "name": "num",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"list\":questionlist}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.QuestionItem"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user/change/detail": {
             "post": {
                 "description": "get a user's detail",
@@ -473,6 +611,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.AuthorItem": {
+            "type": "object",
+            "properties": {
+                "nickname": {
+                    "type": "string"
+                },
+                "sum_like_num": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.PersonDetail": {
             "type": "object",
             "properties": {
@@ -487,6 +639,17 @@ const docTemplate = `{
                 },
                 "gender": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.QuestionItem": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },
