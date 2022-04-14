@@ -9,6 +9,50 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func Verify(c *gin.Context) {
+	email, ok1 := c.GetQuery("email")
+	password, ok2 := c.GetQuery("password")
+	if !ok1 || !ok2 {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "email or password is missing",
+		})
+		return
+	}
+	if repository.CheckExistence(email) {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "email is used",
+		})
+		return
+	}
+	if !checkPassword(password) {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "the password does not comply the rule, please set again",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status": 200,
+		"msg":    "the register is legal",
+	})
+}
+
+func checkPassword(password string) bool {
+	cntCapital, cntLower, cntNum := 0, 0, 0
+	for i := range password {
+		if password[i] >= 'a' && password[i] <= 'z' {
+			cntLower++
+		} else if password[i] >= 'A' && password[i] <= 'Z' {
+			cntCapital++
+		} else if password[i] >= '0' && password[i] <= '9' {
+			cntNum++
+		}
+	}
+	return cntCapital>0 && cntLower>0 && cntNum>0
+}
+
 // @Summary register a new account
 // @Description using password, email and nickname to create a new account
 // @Accept  plain
