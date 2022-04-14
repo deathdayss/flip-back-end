@@ -73,6 +73,16 @@ func GetGameRanking(c *gin.Context) {
 	})
 }
 
+// @Summary search a game by keyword
+// @Description search a game by keyword
+// @Accept  plain
+// @Produce  json
+// @Param   num     header    int     true        "the number of the return item"
+// @Param   keyword     header    string     true        "the keyword"
+// @Param   method  header     string true "the order method"
+// @Param   offset  header     int true "the offset"
+// @Success 200 {array} dto.RankItem   "{"status":200, "List":list}"
+// @Router /v1/search/game [GET]
 func SearchGame(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	keyword := c.Query("keyword")

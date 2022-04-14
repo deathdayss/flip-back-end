@@ -34,7 +34,12 @@ type PersonDetail struct {
 }
 
 type Author struct {
-	URL      string `gorm:"url; not null`
-	NickName string `json:"nickname"`
-	LikeNum  int    `json:"like_num"`
+	URL      string `gorm:"column:url"`
+	NickName string `gorm:"column:nickname"`
+	LikeNum  int    `gorm:"column:like_num"`
+}
+
+type Signature struct {
+	Content string `gorm:"not null"`
+	Email string `gorm:"primary key"`
 }

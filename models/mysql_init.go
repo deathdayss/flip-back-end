@@ -43,4 +43,5 @@ func (db *Db) AutoCreateTable() {
 	db.MsClient.AutoMigrate(&GameRescale{})
 	db.MsClient.AutoMigrate(&Zone{})
 	db.MsClient.AutoMigrate(&Click{})
+	db.MsClient.AutoMigrate(&Signature{})
 }

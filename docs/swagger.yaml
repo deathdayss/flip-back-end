@@ -213,6 +213,42 @@ paths:
               $ref: '#/definitions/dto.RankItem'
             type: array
       summary: get game according to the like number in the same zone
+  /v1/search/game:
+    get:
+      consumes:
+      - text/plain
+      description: search a game by keyword
+      parameters:
+      - description: the number of the return item
+        in: header
+        name: num
+        required: true
+        type: integer
+      - description: the keyword
+        in: header
+        name: keyword
+        required: true
+        type: string
+      - description: the order method
+        in: header
+        name: method
+        required: true
+        type: string
+      - description: the offset
+        in: header
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "List":list}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.RankItem'
+            type: array
+      summary: search a game by keyword
   /v1/user/change/detail:
     post:
       consumes:

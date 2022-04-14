@@ -280,6 +280,59 @@
                 }
             }
         },
+        "/v1/search/game": {
+            "get": {
+                "description": "search a game by keyword",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "search a game by keyword",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "the number of the return item",
+                        "name": "num",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "the keyword",
+                        "name": "keyword",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "the order method",
+                        "name": "method",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "the offset",
+                        "name": "offset",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"List\":list}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.RankItem"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user/change/detail": {
             "post": {
                 "description": "get a user's detail",
