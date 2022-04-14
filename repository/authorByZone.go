@@ -8,7 +8,6 @@ import (
 
 func GetAuthorRankingByZone(zone string, num int) (*[]models.Author, error) {
 	result := []models.Author{}
-
 	err := models.DbClient.MsClient.Debug().Model(&models.Game{}).
 		Select("url", "person.nickname as nickname", "sum(games.like_num) as like_num").
 		Joins("left join person on games.uid = person.id").

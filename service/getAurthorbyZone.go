@@ -9,6 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary get anuthor rank by zone
+// @Description get anuthor rank by zone
+// @Accept  plain
+// @Produce  json
+// @Param   num     header    int     true        "num"
+// @Param   zone     header    string     true        "zone"
+// @Success 200 {array} dto.AuthorList "{"status":200, "detail":ranklist}"
+// @Router /v1/rank/author  [GET]
+
 func GetAurthorRankingByZone(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	zone := c.Query("zone")

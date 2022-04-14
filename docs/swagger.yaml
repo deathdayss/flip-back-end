@@ -136,6 +136,42 @@ paths:
         required: true
         schema:
           type: string
+      - description: question1
+        in: body
+        name: question1
+        required: true
+        schema:
+          type: integer
+      - description: answer1
+        in: body
+        name: answer1
+        required: true
+        schema:
+          type: string
+      - description: question2
+        in: body
+        name: question2
+        required: true
+        schema:
+          type: integer
+      - description: answer2
+        in: body
+        name: answer2
+        required: true
+        schema:
+          type: string
+      - description: question3
+        in: body
+        name: question3
+        required: true
+        schema:
+          type: integer
+      - description: answer3
+        in: body
+        name: answer3
+        required: true
+        schema:
+          type: string
       - description: person image
         in: body
         name: file_body

@@ -6,9 +6,14 @@ import (
 	"github.com/deathdayss/flip-back-end/middleware"
 	"github.com/deathdayss/flip-back-end/service"
 	"github.com/gin-gonic/gin"
+
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	// gin-swagger middleware
+	swaggerFiles "github.com/swaggo/files"
 )
-import "github.com/swaggo/gin-swagger" // gin-swagger middleware
-import "github.com/swaggo/files" // swagger embed files
+
+// swagger embed files
 
 // @title           FLIP backend API
 // @version         1.0
@@ -29,13 +34,13 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		noTokenFeature.POST("/register", service.Register) // /v1/user/register
 		noTokenFeature.POST("/login", service.Login)
 		noTokenFeature.GET("/verify", service.Verify)
+		noTokenFeature.POST("/change/password", service.ChangePassword)
 	}
 	userFeature := engine.Group("/v1/user")
 	{
 		//userFeature.POST("/register", service.Register) // /v1/user/register
 		//userFeature.POST("/login", service.Login)
 		userFeature.Use(middleware.Auth())
-		userFeature.POST("/change/password", service.ChangePassword)
 		userFeature.GET("/detail", service.GetUserDetail)
 		userFeature.POST("/change/detail", service.ChangeDetail)
 

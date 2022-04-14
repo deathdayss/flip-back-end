@@ -2,11 +2,26 @@ package service
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/deathdayss/flip-back-end/repository"
 	"github.com/gin-gonic/gin"
 )
+
+// @Summary vertify a user's email and change password
+// @Description change a user's password
+// @Accept  plain
+// @Produce  json
+// @Param   email     body    string     true        "email"
+// @Success 200 {json} string   "{"status":200, "message":email exists}"
+// @Param   question     body    int     true        "question"
+// @Param   answer     body    string     true        "answer"
+// @Success 200 {json} string   "{"status":200, "message":vertify successfully}"
+// @Param   newpwd     body    string     true        "newpwd"
+// @Param   confirm     body    string     true        "confirm"
+// @Success 200 {json} string   "{"status":200, "message":update successfully}"
+// @Router /v1/notoken/change/password [POST]
 
 func ChangePassword(c *gin.Context) {
 
@@ -38,6 +53,8 @@ func ChangePassword(c *gin.Context) {
 	question, ok2 := c.GetPostForm("question")
 	answer, ok3 := c.GetPostForm("answer")
 
+	questionnum, err := strconv.Atoi(question)
+
 	if !ok2 || !ok3 {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
@@ -46,7 +63,15 @@ func ChangePassword(c *gin.Context) {
 		return
 	}
 
-	if !repository.VerifyAnswer(email, question, answer) {
+	if err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "Invalid id",
+		})
+		return
+	}
+
+	if !repository.VerifyAnswer(email, answer, questionnum) {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status": 401,
 			"error":  "answer is wrong",
