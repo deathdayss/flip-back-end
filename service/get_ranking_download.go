@@ -27,7 +27,21 @@ func GetGameRankingDownloading(c *gin.Context) {
 		})
 		return
 	}
-	rankInfo, err := repository.GetGameRankingDownloading(zone, num)
+	var offset int
+	offsetStr, ok := c.GetQuery("offset")
+	if ! ok {
+		offset = 0
+	} else {
+		offset, err = strconv.Atoi(offsetStr)
+		if err != nil {
+			c.JSON(http.StatusNotAcceptable, gin.H{
+				"status": 406,
+				"error":  "offset if wrong",
+			})
+			return
+		}
+	}
+	rankInfo, err := repository.GetGameRankingDownloading(zone, num, offset)
 	if err != nil || len(*rankInfo) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,

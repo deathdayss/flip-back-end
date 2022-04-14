@@ -75,11 +75,12 @@ func GetGame(id string) (models.Game, error) {
 		return game, nil
 	}
 }
-func GetGameRanking(zone string, num int) (*[]models.Game, error) {
+func GetGameRanking(zone string, num, offset int) (*[]models.Game, error) {
 	result := []models.Game{}
 	err := models.DbClient.MsClient.Where("zone = ?", zone).
 		Order("like_num DESC"). // order by like_num DESC
 		Limit(num).             // limit num
+		Offset(offset).
 		Find(&result).Error
 	if err != nil {
 		return nil, err
@@ -96,11 +97,41 @@ func GetGameRanking(zone string, num int) (*[]models.Game, error) {
 	return &result, nil
 }
 
-func GetGameRankingDownloading(zone string, num int) (*[]models.Game, error) {
+func SearchGame(keyword string, num, offset int, mtd string) (*[]models.Game, error) {
+	result := []models.Game{}
+	var order string
+	switch mtd {
+	case "like": order = "like_num DESC"
+	case "download": order = "download_num DESC"
+	case "comment": order = "comment_num DESC"
+	default: order = "like_num DESC"
+	}
+	err := models.DbClient.MsClient.Where("name LIKE ?", "%"+keyword+"%").
+		Order(order).
+		Limit(num).
+		Offset(offset).
+		Find(&result).Error
+	if err != nil {
+		return nil, err
+	}
+	actualLen := len(result)
+	if actualLen == 0 {
+		return nil, errors.New("No data")
+	}
+	if actualLen < num {
+		for i := actualLen; i < num; i++ {
+			result = append(result, result[i%actualLen])
+		}
+	}
+	return &result, nil
+} 
+
+func GetGameRankingDownloading(zone string, num, offset int) (*[]models.Game, error) {
 	result := []models.Game{}
 	err := models.DbClient.MsClient.Where("zone = ?", zone).
 		Order("download_num DESC").
 		Limit(num).
+		Offset(offset).
 		Find(&result).Error
 	if err != nil {
 		return nil, err

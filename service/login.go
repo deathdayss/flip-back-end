@@ -6,7 +6,6 @@ import (
 	"github.com/deathdayss/flip-back-end/repository"
 	"github.com/gin-gonic/gin"
 )
-
 // @Summary log in a account
 // @Description using password, email and nickname to create a new account
 // @Accept  plain

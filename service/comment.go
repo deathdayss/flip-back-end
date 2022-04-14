@@ -57,6 +57,7 @@ func UpComment(c *gin.Context) {
 	})
 }
 
+
 func GetCommentRanking(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	zone := c.Query("GID")
@@ -67,7 +68,25 @@ func GetCommentRanking(c *gin.Context) {
 		})
 		return
 	}
-	rankInfo, err := repository.GetCommentRanking(zone, num)
+	rankMtd, ok := c.GetQuery("method")
+	if !ok || (rankMtd != "time" && rankMtd != "like") {
+		rankMtd = "time"
+	}
+	var offset int
+	offsetStr, ok := c.GetQuery("offset")
+	if ! ok {
+		offset = 0
+	} else {
+		offset, err = strconv.Atoi(offsetStr)
+		if err != nil {
+			c.JSON(http.StatusNotAcceptable, gin.H{
+				"status": 406,
+				"error":  "offset if wrong",
+			})
+			return
+		}
+	}
+	rankInfo, err := repository.GetCommentRanking(zone, num, rankMtd, offset)
 	if err != nil || len(*rankInfo) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,
@@ -75,7 +94,6 @@ func GetCommentRanking(c *gin.Context) {
 		})
 		return
 	}
-
 	rankList := []dto.RankComment{}
 	for _, ri := range (*rankInfo) {
 		/*
@@ -97,6 +115,7 @@ func GetCommentRanking(c *gin.Context) {
 		"List": rankList,
 	})
 }
+
 func AddComment(c *gin.Context) {
 	emailIt, ok := c.Get("email")
 	if !ok {

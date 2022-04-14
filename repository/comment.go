@@ -55,11 +55,18 @@ func DownComment(cid int) error {
 	return nil
 }
 
-func GetCommentRanking(gid string, num int) (*[]models.Comment, error) {
+func GetCommentRanking(gid string, num int, method string, offset int) (*[]models.Comment, error) {
 	result := []models.Comment{}
+	var order string
+	if method == "time" {
+		order = "create_time DESC"
+	} else {
+		order = "up DESC"
+	}
 	err := models.DbClient.MsClient.Where("g_id = ?", gid).
-		Order("create_time DESC"). // order by create_time DESC
+		Order(order). // order by create_time DESC
 		Limit(num). // limit num
+		Offset(offset).
 		Find(&result).Error
 	if err != nil {
 		return nil, err
