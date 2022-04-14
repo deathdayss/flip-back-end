@@ -28,6 +28,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		noTokenFeature.POST("/register", service.Register) // /v1/user/register
 		noTokenFeature.POST("/login", service.Login)
+		noTokenFeature.GET("/verify", service.Verify)
 	}
 	userFeature := engine.Group("/v1/user")
 	{
