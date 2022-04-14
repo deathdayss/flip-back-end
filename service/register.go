@@ -3,6 +3,7 @@ package service
 import (
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/deathdayss/flip-back-end/repository"
@@ -50,7 +51,7 @@ func checkPassword(password string) bool {
 			cntNum++
 		}
 	}
-	return cntCapital>0 && cntLower>0 && cntNum>0
+	return cntCapital > 0 && cntLower > 0 && cntNum > 0
 }
 
 // @Summary register a new account
@@ -60,6 +61,12 @@ func checkPassword(password string) bool {
 // @Param   email     body    string     true        "email"
 // @Param   password     body    string     true        "password"
 // @Param   nickname     body    string     true        "nickname"
+// @Param   question1     body    int    true        "question1"
+// @Param   answer1    body    string     true        "answer1"
+// @Param   question2     body    int    true        "question2"
+// @Param   answer2    body    string     true        "answer2"
+// @Param   question3     body    int    true        "question3"
+// @Param   answer3    body    string     true        "answer3"
 // @Param   file_body     body    string     false        "person image"
 // @Success 200 {string} json   "{"status":200, "msg":"register successfully":, token":"string"}"
 // @Failure 406 {string} json	"email has been used"
@@ -95,17 +102,36 @@ func Register(c *gin.Context) {
 	answer2, ok7 := c.GetPostForm("answer2")
 	question3, ok8 := c.GetPostForm("question3")
 	answer3, ok9 := c.GetPostForm("answer3")
+	question1num, err1 := strconv.Atoi(question1)
+	question2num, err2 := strconv.Atoi(question2)
+	question3num, err3 := strconv.Atoi(question3)
 
 	if !ok4 || !ok5 || !ok6 || !ok7 || !ok8 || !ok9 || len(answer1) == 0 || len(answer2) == 0 || len(answer3) == 0 {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
-			"error":  "answer missing",
+			"error":  "answer or question missing",
+		})
+		return
+	}
+
+	if question1num == question2num || question1num == question3num || question2num == question3num {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "do not select repeated questions",
+		})
+		return
+	}
+
+	if err1 != nil || err2 != nil || err3 != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "Invalid id",
 		})
 		return
 	}
 
 	if !repository.CheckAnswer(email) {
-		_, err := repository.AddAnswer(email, question1, answer1, question2, answer2, question3, answer3)
+		_, err := repository.AddAnswer(email, answer1, answer2, answer3, question1num, question2num, question3num)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status": http.StatusBadRequest,
