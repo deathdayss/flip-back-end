@@ -89,64 +89,14 @@ func FindNickName(id int) string {
 	}
 
 }
-
-func ChangePassword(email, password string) bool {
-	p := models.Person{}
-	if err := models.DbClient.MsClient.Where("email = ?", string(email)).First(&p).Update("password", string(password)).Error; err != nil {
-		return true
+func FindURL(id int) string {
+	p := models.PersonImg{}
+	if err := models.DbClient.MsClient.Where("id = ?", id).First(&p).Error; err != nil {
+		return "default.jpg"
 	} else {
-		return false
+		return p.URL
 	}
-}
 
-func FindAnswer(email string) (*models.Answer, error) {
-	a := models.Answer{}
-	err := models.DbClient.MsClient.Where("email = ?", string(email)).First(&a).Error
-	if err != nil {
-		return nil, err
-	}
-	return &a, nil
-}
-
-func CheckAnswer(email string) bool {
-	_, err := FindAnswer(email)
-	if err == nil {
-		return true
-	} else {
-		return false
-	}
-}
-
-func VerifyAnswer(email, question, answer string) bool {
-	a, err := FindAnswer(email)
-	if err != nil {
-		return false
-	} else {
-		if a.Question1 == question && a.Answer1 == answer || a.Question2 == question && a.Answer2 == answer || a.Question3 == question && a.Answer3 == answer {
-			return true
-		}
-		return false
-	}
-}
-
-
-func AddAnswer(email, question1, answer1, question2, answer2, question3, answer3 string) (string, error) {
-	a := models.Answer{
-		Email:     email,
-		Question1: question1,
-		Answer1:   answer1,
-		Question2: question2,
-		Answer2:   answer2,
-		Question3: question3,
-		Answer3:   answer3,
-	}
-	tx := models.DbClient.MsClient.Begin()
-	if err := tx.Create(&a).Error; err != nil {
-		tx.Rollback()
-		return "", err
-	}
-	tx.Commit()
-	return email, nil
 }
 
 func GetUserDetail(email string) (*models.PersonDetail, error) {
@@ -162,9 +112,9 @@ func ChangeDetail(email string, fieldName string, fieldVal string) error {
 	details := models.PersonDetail{Email: email}
 	if err := tx.Clauses(clause.Locking{
 		Strength: "UPDATE",
-	  }).Where("email=?", email).First(&details).Error; err != nil && err != gorm.ErrRecordNotFound {
-		  tx.Rollback()
-		  return err
+	}).Where("email=?", email).First(&details).Error; err != nil && err != gorm.ErrRecordNotFound {
+		tx.Rollback()
+		return err
 	}
 	if fieldName == "Age" {
 		age, _ := strconv.Atoi(fieldVal)
@@ -181,4 +131,3 @@ func ChangeDetail(email string, fieldName string, fieldVal string) error {
 	tx.Commit()
 	return nil
 }
-
