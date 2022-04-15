@@ -138,11 +138,6 @@ func Register(c *gin.Context) {
 				"error":  "cannot save answer",
 			})
 			return
-		} else {
-			c.JSON(http.StatusOK, gin.H{
-				"status":  200,
-				"message": "add answer successfully",
-			})
 		}
 	}
 

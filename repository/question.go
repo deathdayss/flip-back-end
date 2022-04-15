@@ -27,6 +27,42 @@ func GetQuestion(num, offset int) (*[]models.Question, error) {
 	return &result, nil
 }
 
+func FindQuestion1(email string) (*models.Question, error) {
+	result := models.Question{}
+	err := models.DbClient.MsClient.
+		Select("answers.questionid1 as id", "content").Model(&models.Answer{}).
+		Joins("join questions on questions.id = questionid1").Where("email = ?", email).
+		First(&result).Error
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func FindQuestion2(email string) (*models.Question, error) {
+	result := models.Question{}
+	err := models.DbClient.MsClient.
+		Select("questionid2 as id", "content").Model(&models.Answer{}).
+		Joins("join questions on questions.id = questionid2").Where("email = ?", email).
+		First(&result).Error
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func FindQuestion3(email string) (*models.Question, error) {
+	result := models.Question{}
+	err := models.DbClient.MsClient.
+		Select("questionid3 as id", "content").Model(&models.Answer{}).
+		Joins("join questions on questions.id = questionid3").Where("email = ?", email).
+		First(&result).Error
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
 func ChangePassword(email, password string) bool {
 	p := models.Person{}
 	if err := models.DbClient.MsClient.Where("email = ?", string(email)).First(&p).Update("password", string(password)).Error; err != nil {

@@ -1,6 +1,6 @@
 package dto
 
 type QuestionItem struct {
-	ID      int    `gorm:"primary_key;AUTO_INCREMENT"`
+	ID      int    `json:"id"`
 	Content string `json:"content"`
 }
