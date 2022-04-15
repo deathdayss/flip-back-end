@@ -44,7 +44,7 @@ func GetUserDetail(c *gin.Context) {
 		"detail": detailDto,
 	})
 }
-var allowedField map[string]bool = map[string]bool{"Age":true, "Gender":true, "Birth":true}
+var allowedField map[string]bool = map[string]bool{"Age":true, "Gender":true, "Birth":true, "Sign":true, "Nickname":true}
 // @Summary get a user's detail
 // @Description get a user's detail
 // @Accept  plain
