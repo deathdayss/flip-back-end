@@ -1,4 +1,13 @@
 definitions:
+  dto.AuthorItem:
+    properties:
+      nickname:
+        type: string
+      sum_like_num:
+        type: integer
+      url:
+        type: string
+    type: object
   dto.PersonDetail:
     properties:
       age:
@@ -9,6 +18,13 @@ definitions:
         type: string
       gender:
         type: string
+    type: object
+  dto.QuestionItem:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
     type: object
   dto.RankItem:
     properties:
@@ -86,6 +102,50 @@ paths:
         "200":
           description: ""
       summary: get a person's image
+  /v1/notoken/change/password:
+    post:
+      consumes:
+      - text/plain
+      description: change a user's password
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: question
+        in: body
+        name: question
+        required: true
+        schema:
+          type: integer
+      - description: answer
+        in: body
+        name: answer
+        required: true
+        schema:
+          type: string
+      - description: newpwd
+        in: body
+        name: newpwd
+        required: true
+        schema:
+          type: string
+      - description: confirm
+        in: body
+        name: confirm
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "message":update successfully}'
+          schema:
+            type: json
+      summary: vertify a user's email and change password
   /v1/notoken/login:
     post:
       consumes:
@@ -197,6 +257,32 @@ paths:
           schema:
             type: string
       summary: register a new account
+  /v1/rank/author:
+    get:
+      consumes:
+      - text/plain
+      description: get anuthor rank by zone
+      parameters:
+      - description: num
+        in: header
+        name: num
+        required: true
+        type: integer
+      - description: zone
+        in: header
+        name: zone
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "list":ranklist}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.AuthorItem'
+            type: array
+      summary: get anuthor rank by zone
   /v1/rank/download:
     get:
       consumes:
@@ -285,6 +371,27 @@ paths:
               $ref: '#/definitions/dto.RankItem'
             type: array
       summary: search a game by keyword
+  /v1/security/question:
+    get:
+      consumes:
+      - text/plain
+      description: get security question list
+      parameters:
+      - description: num
+        in: header
+        name: num
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "list":questionlist}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.QuestionItem'
+            type: array
+      summary: get security question list
   /v1/user/change/detail:
     post:
       consumes:

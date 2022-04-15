@@ -22,7 +22,6 @@ import (
 // @Param   confirm     body    string     true        "confirm"
 // @Success 200 {json} string   "{"status":200, "message":update successfully}"
 // @Router /v1/notoken/change/password [POST]
-
 func ChangePassword(c *gin.Context) {
 
 	email, ok1 := c.GetPostForm("email")
@@ -43,11 +42,6 @@ func ChangePassword(c *gin.Context) {
 			"error":  "email does not exist",
 		})
 		return
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  200,
-			"message": "email exists",
-		})
 	}
 
 	question, ok2 := c.GetPostForm("question")
@@ -77,11 +71,6 @@ func ChangePassword(c *gin.Context) {
 			"error":  "answer is wrong",
 		})
 		return
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  200,
-			"message": "vertify successfully",
-		})
 	}
 
 	newpwd, ok4 := c.GetPostForm("newpwd")
