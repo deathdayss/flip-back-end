@@ -108,7 +108,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		ShowCommentFeature.GET("/time", service.GetCommentRanking)
 	}
-	SecurityQuestionFeature := engine.Group("/v1/sequrity")
+	SecurityQuestionFeature := engine.Group("/v1/security")
 	{
 		SecurityQuestionFeature.GET("/question", service.GetSecurityQuestion)
 	}

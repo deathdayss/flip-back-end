@@ -15,7 +15,7 @@ import (
 // @Produce  json
 // @Param   num     header    int     true        "num"
 // @Success 200 {array} dto.QuestionItem  "{"status":200, "list":questionlist}"
-// @Router /v1/sequrity/question  [GET]
+// @Router /v1/security/question  [GET]
 func GetSecurityQuestion(c *gin.Context) {
 
 	num, err := strconv.Atoi(c.Query("num"))
