@@ -111,6 +111,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	SecurityQuestionFeature := engine.Group("/v1/security")
 	{
 		SecurityQuestionFeature.GET("/question", service.GetSecurityQuestion)
+		SecurityQuestionFeature.GET("/user/question", service.FindSecurityQuestion)
 	}
 	SearchFeature := engine.Group("/v1/search")
 	{

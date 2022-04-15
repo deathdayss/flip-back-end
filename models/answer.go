@@ -3,11 +3,11 @@ package models
 type Answer struct {
 	UserID    int    `gorm:"column:user_id"`
 	Email     string `json:"email"`
-	Question1 int    `gorm:"column:question1id"`
+	Question1 int    `gorm:"column:questionid1"`
 	Answer1   string `json:"answer1"`
-	Question2 int    `gorm:"column:question2id"`
+	Question2 int    `gorm:"column:questionid2"`
 	Answer2   string `json:"answer2"`
-	Question3 int    `gorm:"column:question3id"`
+	Question3 int    `gorm:"column:questionid3"`
 	Answer3   string `json:"answer3"`
 }
 

@@ -42,11 +42,6 @@ func ChangePassword(c *gin.Context) {
 			"error":  "email does not exist",
 		})
 		return
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  200,
-			"message": "email exists",
-		})
 	}
 
 	question, ok2 := c.GetPostForm("question")
@@ -76,11 +71,6 @@ func ChangePassword(c *gin.Context) {
 			"error":  "answer is wrong",
 		})
 		return
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"status":  200,
-			"message": "vertify successfully",
-		})
 	}
 
 	newpwd, ok4 := c.GetPostForm("newpwd")

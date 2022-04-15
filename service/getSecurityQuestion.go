@@ -61,3 +61,53 @@ func GetSecurityQuestion(c *gin.Context) {
 		"List":   questionList,
 	})
 }
+
+func FindSecurityQuestion(c *gin.Context) {
+
+	email := c.Query("email")
+
+	question1, err := repository.FindQuestion1(email)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status": 401,
+			"error":  "the user has no question1",
+		})
+		return
+	}
+	question2, err := repository.FindQuestion2(email)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status": 401,
+			"error":  "the user has no question2",
+		})
+		return
+	}
+	question3, err := repository.FindQuestion3(email)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status": 401,
+			"error":  "the user has no question3",
+		})
+		return
+	}
+	questionList := []dto.QuestionItem{}
+
+	questionList = append(questionList, dto.QuestionItem{
+		ID:      question1.ID,
+		Content: question1.Content,
+	})
+
+	questionList = append(questionList, dto.QuestionItem{
+		ID:      question2.ID,
+		Content: question2.Content,
+	})
+	questionList = append(questionList, dto.QuestionItem{
+		ID:      question3.ID,
+		Content: question3.Content,
+	})
+
+	c.JSON(http.StatusOK, gin.H{
+		"Status": 200,
+		"List":   questionList,
+	})
+}
