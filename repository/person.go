@@ -109,6 +109,23 @@ func GetUserDetail(email string) (*models.PersonDetail, error) {
 
 func ChangeDetail(email string, fieldName string, fieldVal string) error {
 	tx := models.DbClient.MsClient.Begin()
+	if fieldName == "Sign" {
+		sign := models.Signature{Email: email, Content: fieldVal}
+		if err := tx.Model(sign).Save(sign).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+		tx.Commit()
+		return nil
+	}
+	if fieldName == "Nickname" {
+		if err := tx.Model(&models.Person{}).Where("email=?", email).Update("nickname", fieldVal).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+		tx.Commit()
+		return nil
+	}
 	details := models.PersonDetail{Email: email}
 	if err := tx.Clauses(clause.Locking{
 		Strength: "UPDATE",
