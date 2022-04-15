@@ -501,7 +501,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sequrity/question": {
+        "/v1/security/question": {
             "get": {
                 "description": "get security question list",
                 "consumes": [

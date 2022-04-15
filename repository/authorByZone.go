@@ -12,7 +12,7 @@ func GetAuthorRankingByZone(zone string, num int) (*[]models.Author, error) {
 		Select("url", "person.nickname as nickname", "sum(games.like_num) as like_num").
 		Joins("left join person on games.uid = person.id").
 		Joins("join person_imgs on games.uid = person_imgs.uid").Where("zone=?", zone).
-		Group("games.uid").
+		Group("games.uid and url").
 		Order("sum(like_num)").
 		Limit(num).
 		Find(&result).Error

@@ -371,7 +371,7 @@ paths:
               $ref: '#/definitions/dto.RankItem'
             type: array
       summary: search a game by keyword
-  /v1/sequrity/question:
+  /v1/security/question:
     get:
       consumes:
       - text/plain
