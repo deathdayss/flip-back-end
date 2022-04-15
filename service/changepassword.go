@@ -22,8 +22,7 @@ import (
 // @Param   confirm     body    string     true        "confirm"
 // @Success 200 {json} string   "{"status":200, "message":update successfully}"
 // @Router /v1/notoken/change/password [POST]
-func ChangePassword(c *gin.Context) {
-
+func VertifyExist(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
 
 	if !ok1 {
@@ -44,15 +43,23 @@ func ChangePassword(c *gin.Context) {
 		return
 	}
 
+	c.JSON(http.StatusOK, gin.H{
+		"status": 200,
+		"msg":    "email is vertified",
+	})
+}
+
+func VertifyAnswer(c *gin.Context) {
+	email, ok1 := c.GetPostForm("email")
 	question, ok2 := c.GetPostForm("question")
 	answer, ok3 := c.GetPostForm("answer")
 
 	questionnum, err := strconv.Atoi(question)
 
-	if !ok2 || !ok3 {
+	if !ok1 || !ok2 || !ok3 {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
-			"error":  "answer is missing",
+			"error":  "email or answer is missing",
 		})
 		return
 	}
@@ -72,13 +79,21 @@ func ChangePassword(c *gin.Context) {
 		})
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{
+		"status": 200,
+		"msg":    "answer is correct",
+	})
 
-	newpwd, ok4 := c.GetPostForm("newpwd")
-	confirm, ok5 := c.GetPostForm("confirm")
-	if !ok4 || !ok5 || len(newpwd) == 0 || len(confirm) == 0 {
+}
+
+func ChangePassword(c *gin.Context) {
+	email, ok1 := c.GetPostForm("email")
+	newpwd, ok2 := c.GetPostForm("newpwd")
+	confirm, ok3 := c.GetPostForm("confirm")
+	if !ok1 || !ok2 || !ok3 || len(newpwd) == 0 || len(confirm) == 0 || len(email) == 0 {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
-			"error":  "new password or confirm password is missing",
+			"error":  "email, new password or confirm password is missing",
 		})
 		return
 	}
