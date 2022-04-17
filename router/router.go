@@ -97,7 +97,6 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 
 	verificationCodeFeature := engine.Group("/v1/verification")
 	{
-		verificationCodeFeature.Use(middleware.Auth())
 		verificationCodeFeature.GET("/code", service.GetCode)
 	}
 	ChangeCommentFeature := engine.Group("/v1/change/comment")
