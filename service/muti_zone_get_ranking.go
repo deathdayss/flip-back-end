@@ -9,15 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary get game according to the like number in the same zone
-// @Description get game according to the like number in the same zone
-// @Accept  plain
-// @Produce  json
-// @Param   num     header    int     true        "the number of the return itme"
-// @Param   zone     header    int     true        "the zone"
-// @Success 200 {array} dto.RankItem   "{"status":200, "List":list}"
-// @Router /v1/rank/zone [GET]
-func GetGameRanking(c *gin.Context) {
+func GetGameRankingByZone(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	zone := c.Query("zone")
 	if err != nil || len(zone) == 0 {
@@ -27,6 +19,12 @@ func GetGameRanking(c *gin.Context) {
 		})
 		return
 	}
+
+	rankMtd, ok := c.GetQuery("method")
+	if !ok || (rankMtd != "like" && rankMtd != "download" && rankMtd != "comment") {
+		rankMtd = "time"
+	}
+
 	var offset int
 	offsetStr, ok := c.GetQuery("offset")
 	if !ok {
@@ -41,7 +39,8 @@ func GetGameRanking(c *gin.Context) {
 			return
 		}
 	}
-	rankInfo, err := repository.GetGameRanking(zone, num, offset)
+
+	rankInfo, err := repository.GetGameRankingByZone(zone, num, offset, rankMtd)
 	if err != nil || len(*rankInfo) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,
@@ -50,14 +49,9 @@ func GetGameRanking(c *gin.Context) {
 		return
 	}
 
-	rankList := []dto.RankItem{}
+	rankList := []dto.RankItemByZone{}
 	for _, ri := range *rankInfo {
-		/*
-			fp, err := ioutil.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
-			if err != nil {
-				fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
-			}*/
-		rankList = append(rankList, dto.RankItem{
+		rankList = append(rankList, dto.RankItemByZone{
 			ID:          ri.ID,
 			Name:        ri.Name,
 			LikeNum:     ri.LikeNum,
@@ -65,6 +59,7 @@ func GetGameRanking(c *gin.Context) {
 			CommentNum:  ri.CommentNum,
 			Img:         ri.ImgUrl,
 			AuthorName:  repository.FindNickName(ri.UID),
+			ClickCount:  repository.GetGameClick(ri.ID),
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -73,17 +68,7 @@ func GetGameRanking(c *gin.Context) {
 	})
 }
 
-// @Summary search a game by keyword
-// @Description search a game by keyword
-// @Accept  plain
-// @Produce  json
-// @Param   num     header    int     true        "the number of the return item"
-// @Param   keyword     header    string     true        "the keyword"
-// @Param   method  header     string true "the order method"
-// @Param   offset  header     int true "the offset"
-// @Success 200 {array} dto.RankItem   "{"status":200, "List":list}"
-// @Router /v1/search/game [GET]
-func SearchGame(c *gin.Context) {
+func SearchGameByZone(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	keyword := c.Query("keyword")
 	if err != nil || len(keyword) == 0 {
@@ -111,7 +96,7 @@ func SearchGame(c *gin.Context) {
 			return
 		}
 	}
-	rankInfo, err := repository.SearchGame(keyword, num, offset, rankMtd)
+	rankInfo, err := repository.SearchGameByZone(keyword, num, offset, rankMtd)
 	if err != nil || len(*rankInfo) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,
@@ -119,14 +104,9 @@ func SearchGame(c *gin.Context) {
 		})
 		return
 	}
-	rankList := []dto.RankItem{}
+	rankList := []dto.RankItemByZone{}
 	for _, ri := range *rankInfo {
-		/*
-			fp, err := ioutil.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
-			if err != nil {
-				fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
-			}*/
-		rankList = append(rankList, dto.RankItem{
+		rankList = append(rankList, dto.RankItemByZone{
 			ID:          ri.ID,
 			Name:        ri.Name,
 			LikeNum:     ri.LikeNum,
@@ -134,6 +114,7 @@ func SearchGame(c *gin.Context) {
 			CommentNum:  ri.CommentNum,
 			Img:         ri.ImgUrl,
 			AuthorName:  repository.FindNickName(ri.UID),
+			ClickCount:  repository.GetGameClick(ri.ID),
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{

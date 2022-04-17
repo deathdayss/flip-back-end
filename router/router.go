@@ -119,6 +119,27 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	{
 		SearchFeature.GET("/game", service.SearchGame)
 	}
+
+	MultiZoneFeature := engine.Group("/v2")
+	{
+		//upload
+		MultiZoneFeature.Use(middleware.Auth())
+		MultiZoneFeature.POST("/upload/info", service.UploadInfoByZone)
+		MultiZoneFeature.POST("/upload/game", service.UploadZipByZone)
+
+		//download
+		MultiZoneFeature.GET("/download/img", service.DownloadImgByZone)
+		MultiZoneFeature.GET("/download/game", service.DownloadGameByZone)
+		MultiZoneFeature.GET("/download/personal", service.DownloadPersonalByZone)
+
+		//getRanking
+		MultiZoneFeature.GET("/rank/zone", service.GetGameRankingByZone)
+		MultiZoneFeature.GET("/rank/download", service.GetGameRankingDownloadingByZone)
+
+		//search
+		MultiZoneFeature.GET("/search/game", service.SearchGameByZone)
+	}
+
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	engine.Run(":8084")
 	return engine

@@ -75,6 +75,7 @@ func GetGame(id string) (models.Game, error) {
 		return game, nil
 	}
 }
+
 func GetGameRanking(zone string, num, offset int) (*[]models.Game, error) {
 	result := []models.Game{}
 	err := models.DbClient.MsClient.Where("zone = ?", zone).
@@ -101,10 +102,14 @@ func SearchGame(keyword string, num, offset int, mtd string) (*[]models.Game, er
 	result := []models.Game{}
 	var order string
 	switch mtd {
-	case "like": order = "like_num DESC"
-	case "download": order = "download_num DESC"
-	case "comment": order = "comment_num DESC"
-	default: order = "like_num DESC"
+	case "like":
+		order = "like_num DESC"
+	case "download":
+		order = "download_num DESC"
+	case "comment":
+		order = "comment_num DESC"
+	default:
+		order = "like_num DESC"
 	}
 	err := models.DbClient.MsClient.Where("name LIKE ?", "%"+keyword+"%").
 		Order(order).
@@ -124,7 +129,7 @@ func SearchGame(keyword string, num, offset int, mtd string) (*[]models.Game, er
 		}
 	}
 	return &result, nil
-} 
+}
 
 func GetGameRankingDownloading(zone string, num, offset int) (*[]models.Game, error) {
 	result := []models.Game{}
