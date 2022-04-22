@@ -9,6 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary get game rank by zone
+// @Description get game rank by zone odered by downloading
+// @Accept  plain
+// @Produce  json
+// @Param   num     header    int     true        "num"
+// @Param   zone     header    string     true        "zone"
+// @Success 200 {array} dto.RankItemByZone "{"status":200, "list":ranklist}"
+// @Router /v1/rank/download  [GET]
 func GetGameRankingDownloadingByZone(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	zone := c.Query("zone")

@@ -9,6 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary get game rank by zone
+// @Description get game rank by zone ordered by like, download or comment with default like
+// @Accept  plain
+// @Produce  json
+// @Param   num     header    int     true        "num"
+// @Param   zone     header    string     true        "zone"
+// @Param   method     header    string     true        "like, download or comment with default like"
+// @Success 200 {array} dto.RankItemByZone "{"status":200, "list":ranklist}"
+// @Router /v1/rank/zone  [GET]
 func GetGameRankingByZone(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	zone := c.Query("zone")
@@ -68,6 +77,15 @@ func GetGameRankingByZone(c *gin.Context) {
 	})
 }
 
+// @Summary search game
+// @Description search game ordered by like, download or comment with default like
+// @Accept  plain
+// @Produce  json
+// @Param   num     header    int     true        "num"
+// @Param   keyword     header    string     true        "keyword"
+// @Param   method     header    string     true        "like, download or comment with default like"
+// @Success 200 {array} dto.RankItemByZone "{"status":200, "list":ranklist}"
+// @Router /v1/search/game  [GET]
 func SearchGameByZone(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	keyword := c.Query("keyword")
