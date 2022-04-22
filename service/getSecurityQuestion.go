@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary get security question list
+// @Summary get security question list with an input number
 // @Description get security question list
 // @Accept  plain
 // @Produce  json
@@ -62,6 +62,13 @@ func GetSecurityQuestion(c *gin.Context) {
 	})
 }
 
+// @Summary get a user's security question list
+// @Description get a user's security question list
+// @Accept  plain
+// @Produce  json
+// @Param   email     header    string     true        "email"
+// @Success 200 {array} dto.QuestionItem  "{"status":200, "list":questionlist}"
+// @Router /v1/security/user/question  [GET]
 func FindSecurityQuestion(c *gin.Context) {
 
 	email := c.Query("email")

@@ -9,19 +9,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary vertify a user's email and change password
-// @Description change a user's password
+// @Summary vertify a user's email
+// @Description vertify a user's password
 // @Accept  plain
 // @Produce  json
 // @Param   email     body    string     true        "email"
-// @Success 200 {json} string   "{"status":200, "message":email exists}"
-// @Param   question     body    int     true        "question"
-// @Param   answer     body    string     true        "answer"
-// @Success 200 {json} string   "{"status":200, "message":vertify successfully}"
-// @Param   newpwd     body    string     true        "newpwd"
-// @Param   confirm     body    string     true        "confirm"
-// @Success 200 {json} string   "{"status":200, "message":update successfully}"
-// @Router /v1/notoken/change/password [POST]
+// @Success 200 {json} string   "{"status":200, "message":email is vertified}"
+// @Router /v1/notoken/change/vertify [POST]
 func VertifyExist(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
 
@@ -45,10 +39,19 @@ func VertifyExist(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": 200,
-		"msg":    "email is vertified",
+		"msg":    "email is verified",
 	})
 }
 
+// @Summary vertify the answer to security question
+// @Description vertify the answer to security question
+// @Accept  plain
+// @Produce  json
+// @Param   email    body    string     true        "email"
+// @Param   question     body    int     true        "question"
+// @Param   answer     body    string     true        "answer"
+// @Success 200 {json} string   "{"status":200, "message":answer is correct}"
+// @Router /v1/notoken/change/answer[POST]
 func VertifyAnswer(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
 	question, ok2 := c.GetPostForm("question")
@@ -86,6 +89,15 @@ func VertifyAnswer(c *gin.Context) {
 
 }
 
+// @Summary change a user's password
+// @Description change a user's password
+// @Accept  plain
+// @Produce  json
+// @Param   email    body    string     true        "email"
+// @Param   newpwd     body    string     true        "newpwd"
+// @Param   confirm     body    string     true        "confirm"
+// @Success 200 {json} string   "{"status":200, "message":update successfully}"
+// @Router /v1/notoken/change/password[POST]
 func ChangePassword(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
 	newpwd, ok2 := c.GetPostForm("newpwd")
