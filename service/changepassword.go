@@ -51,7 +51,7 @@ func VertifyExist(c *gin.Context) {
 // @Param   question     body    int     true        "question"
 // @Param   answer     body    string     true        "answer"
 // @Success 200 {json} string   "{"status":200, "message":answer is correct}"
-// @Router /v1/notoken/change/answer[POST]
+// @Router /v1/notoken/change/answer [POST]
 func VertifyAnswer(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
 	question, ok2 := c.GetPostForm("question")
@@ -97,7 +97,7 @@ func VertifyAnswer(c *gin.Context) {
 // @Param   newpwd     body    string     true        "newpwd"
 // @Param   confirm     body    string     true        "confirm"
 // @Success 200 {json} string   "{"status":200, "message":update successfully}"
-// @Router /v1/notoken/change/password[POST]
+// @Router /v1/notoken/change/password [POST]
 func ChangePassword(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
 	newpwd, ok2 := c.GetPostForm("newpwd")
