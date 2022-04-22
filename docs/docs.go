@@ -17,6 +17,107 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/collect/check": {
+            "get": {
+                "description": "check whether the user has collected the game",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "check whether the user has collected the game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "GID",
+                        "name": "gid",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "UID",
+                        "name": "uid",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":http.StatusOK, \"msg\":true}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/collect/click": {
+            "get": {
+                "description": "allow user to collect a game",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "allow user to collect a game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "GID",
+                        "name": "gid",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "UID",
+                        "name": "uid",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":http.StatusOK, \"msg\":\"successfully collect/uncollect\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/collect/num": {
+            "get": {
+                "description": "get the collect number of a game",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get the collect number of a game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "GID",
+                        "name": "gid",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":http.StatusOK, \"count\":count}",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/download/game": {
             "get": {
                 "description": "get a game, return a zip",
@@ -138,7 +239,7 @@ const docTemplate = `{
                     "200": {
                         "description": "{\"status\":200, \"message\":answer is correct}",
                         "schema": {
-                            "type": "json"
+                            "type": "string"
                         }
                     }
                 }
@@ -187,7 +288,7 @@ const docTemplate = `{
                     "200": {
                         "description": "{\"status\":200, \"message\":update successfully}",
                         "schema": {
-                            "type": "json"
+                            "type": "string"
                         }
                     }
                 }
@@ -218,7 +319,7 @@ const docTemplate = `{
                     "200": {
                         "description": "{\"status\":200, \"message\":email is vertified}",
                         "schema": {
-                            "type": "json"
+                            "type": "string"
                         }
                     }
                 }

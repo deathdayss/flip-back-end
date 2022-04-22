@@ -51,6 +51,73 @@ info:
   title: FLIP backend API
   version: "1.0"
 paths:
+  /v1/collect/check:
+    get:
+      consumes:
+      - text/plain
+      description: check whether the user has collected the game
+      parameters:
+      - description: GID
+        in: header
+        name: gid
+        required: true
+        type: integer
+      - description: UID
+        in: header
+        name: uid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":http.StatusOK, "msg":true}'
+          schema:
+            type: string
+      summary: check whether the user has collected the game
+  /v1/collect/click:
+    get:
+      consumes:
+      - text/plain
+      description: allow user to collect a game
+      parameters:
+      - description: GID
+        in: header
+        name: gid
+        required: true
+        type: integer
+      - description: UID
+        in: header
+        name: uid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":http.StatusOK, "msg":"successfully collect/uncollect"}'
+          schema:
+            type: string
+      summary: allow user to collect a game
+  /v1/collect/num:
+    get:
+      consumes:
+      - text/plain
+      description: get the collect number of a game
+      parameters:
+      - description: GID
+        in: header
+        name: gid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":http.StatusOK, "count":count}'
+          schema:
+            type: int
+      summary: get the collect number of a game
   /v1/download/game:
     get:
       consumes:
@@ -132,7 +199,7 @@ paths:
         "200":
           description: '{"status":200, "message":answer is correct}'
           schema:
-            type: json
+            type: string
       summary: vertify the answer to security question
   /v1/notoken/change/password:
     post:
@@ -164,7 +231,7 @@ paths:
         "200":
           description: '{"status":200, "message":update successfully}'
           schema:
-            type: json
+            type: string
       summary: change a user's password
   /v1/notoken/change/vertify:
     post:
@@ -184,7 +251,7 @@ paths:
         "200":
           description: '{"status":200, "message":email is vertified}'
           schema:
-            type: json
+            type: string
       summary: vertify a user's email
   /v1/notoken/login:
     post:
