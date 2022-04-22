@@ -13,7 +13,7 @@ import (
 // @Accept  plain
 // @Produce  json
 // @Param   id    header    int     true        "id"
-// @Success 200 {object} Person  "{"status":200, "userinfo": userInfo}"
+// @Success 200 {object} repository.Person  "{"status":200, "userinfo": userInfo}"
 // @Router /v1/info/getuserinfo [GET]
 func GetUserInfo(c *gin.Context) {
 	id, ok1 := c.GetPostForm("id")
