@@ -16,7 +16,7 @@ import (
 // @Param   email    body    string     true        "email"
 // @Param   comment_id     body    int     true        "comment_id"
 // @Success 200 {string} json   "{"status":200, "message":"the comment has been up"}"
-// @Router v1/change/comment/up [POST]
+// @Router /v1/change/commentcomment/up [POST]
 func UpComment(c *gin.Context) {
 	emailIt, ok := c.Get("email")
 	if !ok {
@@ -140,7 +140,7 @@ func GetCommentRanking(c *gin.Context) {
 // @Param   email    body    string     true        "email"
 // @Param   game_id     body    int     true        "gameid"
 // @Success 200 {string} json   "{"status":200, "message":the comment has bee added}"
-// @Router v1/change/comment/add [POST]
+// @Router /v1/change/comment/add [POST]
 func AddComment(c *gin.Context) {
 	emailIt, ok := c.Get("email")
 	if !ok {
