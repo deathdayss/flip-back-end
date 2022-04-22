@@ -102,11 +102,11 @@ paths:
         "200":
           description: ""
       summary: get a person's image
-  /v1/notoken/change/password:
+  /v1/notoken/change/answer:
     post:
       consumes:
       - text/plain
-      description: change a user's password
+      description: vertify the answer to security question
       parameters:
       - description: email
         in: body
@@ -123,6 +123,26 @@ paths:
       - description: answer
         in: body
         name: answer
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "message":answer is correct}'
+          schema:
+            type: json
+      summary: vertify the answer to security question
+  /v1/notoken/change/password:
+    post:
+      consumes:
+      - text/plain
+      description: change a user's password
+      parameters:
+      - description: email
+        in: body
+        name: email
         required: true
         schema:
           type: string
@@ -145,7 +165,27 @@ paths:
           description: '{"status":200, "message":update successfully}'
           schema:
             type: json
-      summary: vertify a user's email and change password
+      summary: change a user's password
+  /v1/notoken/change/vertify:
+    post:
+      consumes:
+      - text/plain
+      description: vertify a user's password
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "message":email is vertified}'
+          schema:
+            type: json
+      summary: vertify a user's email
   /v1/notoken/login:
     post:
       consumes:
@@ -391,7 +431,28 @@ paths:
             items:
               $ref: '#/definitions/dto.QuestionItem'
             type: array
-      summary: get security question list
+      summary: get security question list with an input number
+  /v1/security/user/question:
+    get:
+      consumes:
+      - text/plain
+      description: get a user's security question list
+      parameters:
+      - description: email
+        in: header
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "list":questionlist}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.QuestionItem'
+            type: array
+      summary: get a user's security question list
   /v1/user/change/detail:
     post:
       consumes:

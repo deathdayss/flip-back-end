@@ -95,16 +95,16 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/notoken/change/password": {
+        "/v1/notoken/change/answer": {
             "post": {
-                "description": "change a user's password",
+                "description": "vertify the answer to security question",
                 "consumes": [
                     "text/plain"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "vertify a user's email and change password",
+                "summary": "vertify the answer to security question",
                 "parameters": [
                     {
                         "description": "email",
@@ -127,6 +127,37 @@ const docTemplate = `{
                     {
                         "description": "answer",
                         "name": "answer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"message\":answer is correct}",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/notoken/change/password": {
+            "post": {
+                "description": "change a user's password",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "change a user's password",
+                "parameters": [
+                    {
+                        "description": "email",
+                        "name": "email",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -155,6 +186,37 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "{\"status\":200, \"message\":update successfully}",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/notoken/change/vertify": {
+            "post": {
+                "description": "vertify a user's password",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "vertify a user's email",
+                "parameters": [
+                    {
+                        "description": "email",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"message\":email is vertified}",
                         "schema": {
                             "type": "json"
                         }
@@ -510,12 +572,44 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "get security question list",
+                "summary": "get security question list with an input number",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "num",
                         "name": "num",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"list\":questionlist}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.QuestionItem"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/security/user/question": {
+            "get": {
+                "description": "get a user's security question list",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get a user's security question list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
                         "in": "header",
                         "required": true
                     }
