@@ -14,7 +14,7 @@ import (
 // @Accept  plain
 // @Produce  json
 // @Param   email     body    string     true        "email"
-// @Success 200 {json} string   "{"status":200, "message":email is vertified}"
+// @Success 200 {string} json   "{"status":200, "message":email is vertified}"
 // @Router /v1/notoken/change/vertify [POST]
 func VertifyExist(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
@@ -50,7 +50,7 @@ func VertifyExist(c *gin.Context) {
 // @Param   email    body    string     true        "email"
 // @Param   question     body    int     true        "question"
 // @Param   answer     body    string     true        "answer"
-// @Success 200 {json} string   "{"status":200, "message":answer is correct}"
+// @Success 200 {string} json   "{"status":200, "message":answer is correct}"
 // @Router /v1/notoken/change/answer [POST]
 func VertifyAnswer(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
@@ -96,7 +96,7 @@ func VertifyAnswer(c *gin.Context) {
 // @Param   email    body    string     true        "email"
 // @Param   newpwd     body    string     true        "newpwd"
 // @Param   confirm     body    string     true        "confirm"
-// @Success 200 {json} string   "{"status":200, "message":update successfully}"
+// @Success 200 {string} json   "{"status":200, "message":update successfully}"
 // @Router /v1/notoken/change/password [POST]
 func ChangePassword(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
