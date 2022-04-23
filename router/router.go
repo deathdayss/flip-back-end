@@ -60,7 +60,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		rankFeature.GET("/download", service.GetGameRankingDownloading)
 		rankFeature.GET("/author", service.GetAurthorRankingByZone)
 		//newRank Settings
-		rankFeature.GET("/multi_zone", service.GetGameRankingByZone)
+		rankFeature.GET("/multi_zone", service.GetGameRankingByMultiZone)
 	}
 	userinfoFeature := engine.Group("/v1/info")
 	{
@@ -133,7 +133,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		MultiZoneFeature.GET("/download/personal", service.DownloadPersonalByZone)
 
 		//getRanking
-		MultiZoneFeature.GET("/rank/zone", service.GetGameRankingByZone)
+		MultiZoneFeature.GET("/rank/zone", service.GetGameRankingByMultiZone)
 		MultiZoneFeature.GET("/rank/download", service.GetGameRankingDownloadingByZone)
 
 		//search

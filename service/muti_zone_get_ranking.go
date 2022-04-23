@@ -49,7 +49,7 @@ func GetGameRankingByMultiZone(c *gin.Context) {
 		}
 	}
 
-	rankInfo, err := repository.GetGameRankingByMultiZone(zone, num, offset, rankMtd)
+	rankInfo, err := repository.GetGameRankingByZone(zone, num, offset, rankMtd)
 	if err != nil || len(*rankInfo) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,
