@@ -31,7 +31,7 @@ func UpComment(c *gin.Context) {
 	if !ok {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": 400,
-			"error": "the comment id does not exist",
+			"error":  "the comment id does not exist",
 		})
 		return
 	}
@@ -39,24 +39,23 @@ func UpComment(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": 400,
-			"error": "the comment id does not exist",
+			"error":  "the comment id does not exist",
 		})
-		return 
+		return
 	}
 	err = repository.UpComment(cid, pid)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": 400,
-			"error": "the comment has been up by the user",
+			"error":  "the comment has been up by the user",
 		})
-		return 
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status": 200,
-		"msg": "the comment has been up",
+		"msg":    "the comment has been up",
 	})
 }
-
 
 func GetCommentRanking(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
@@ -74,7 +73,7 @@ func GetCommentRanking(c *gin.Context) {
 	}
 	var offset int
 	offsetStr, ok := c.GetQuery("offset")
-	if ! ok {
+	if !ok {
 		offset = 0
 	} else {
 		offset, err = strconv.Atoi(offsetStr)
@@ -95,24 +94,24 @@ func GetCommentRanking(c *gin.Context) {
 		return
 	}
 	rankList := []dto.RankComment{}
-	for _, ri := range (*rankInfo) {
+	for _, ri := range *rankInfo {
 		/*
-		fp, err := ioutil.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
-		if err != nil {
-			fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
-		}*/
+			fp, err := ioutil.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
+			if err != nil {
+				fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
+			}*/
 		rankList = append(rankList, dto.RankComment{
-			ID: ri.ID,
-			Comment: ri.Content,
-			LikeNum: ri.Up,
+			ID:         ri.ID,
+			Comment:    ri.Content,
+			LikeNum:    ri.Up,
 			CreateTime: ri.CreateTime.String(),
-			GID: ri.GID,
-			UID: ri.UID,
+			GID:        ri.GID,
+			UID:        ri.UID,
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"Status": 200,
-		"List": rankList,
+		"List":   rankList,
 	})
 }
 
@@ -138,7 +137,7 @@ func AddComment(c *gin.Context) {
 	if !ok {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": 400,
-			"error": "the game id does not exist",
+			"error":  "the game id does not exist",
 		})
 		return
 	}
@@ -146,28 +145,28 @@ func AddComment(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": 400,
-			"error": "the game id does not exist",
+			"error":  "the game id does not exist",
 		})
-		return 
+		return
 	}
 	comment, ok := c.GetPostForm("comment")
 	if !ok {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": 400,
-			"error": "the game id does not exist",
+			"error":  "the game id does not exist",
 		})
-		return 
+		return
 	}
 	err = repository.AddComment(comment, gid, pid)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": 400,
-			"error": "the comment can not be added",
+			"error":  "the comment can not be added",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status": 200,
-		"msg": "the comment has been added",
+		"msg":    "the comment has been added",
 	})
 }

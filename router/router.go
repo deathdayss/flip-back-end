@@ -34,6 +34,8 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		noTokenFeature.POST("/register", service.Register) // /v1/user/register
 		noTokenFeature.POST("/login", service.Login)
 		noTokenFeature.GET("/verify", service.Verify)
+		noTokenFeature.POST("/change/vertify", service.VertifyExist)
+		noTokenFeature.POST("/change/answer", service.VertifyAnswer)
 		noTokenFeature.POST("/change/password", service.ChangePassword)
 	}
 	userFeature := engine.Group("/v1/user")
@@ -95,7 +97,6 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 
 	verificationCodeFeature := engine.Group("/v1/verification")
 	{
-		verificationCodeFeature.Use(middleware.Auth())
 		verificationCodeFeature.GET("/code", service.GetCode)
 	}
 	ChangeCommentFeature := engine.Group("/v1/change/comment")
@@ -118,6 +119,27 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		SearchFeature.GET("/game", service.SearchGame)
 		SearchFeature.GET("/rank", service.SearchRank)
 	}
+
+	MultiZoneFeature := engine.Group("/v2")
+	{
+		//upload
+		MultiZoneFeature.Use(middleware.Auth())
+		MultiZoneFeature.POST("/upload/info", service.UploadInfoByZone)
+		MultiZoneFeature.POST("/upload/game", service.UploadZipByZone)
+
+		//download
+		MultiZoneFeature.GET("/download/img", service.DownloadImgByZone)
+		MultiZoneFeature.GET("/download/game", service.DownloadGameByZone)
+		MultiZoneFeature.GET("/download/personal", service.DownloadPersonalByZone)
+
+		//getRanking
+		MultiZoneFeature.GET("/rank/zone", service.GetGameRankingByZone)
+		MultiZoneFeature.GET("/rank/download", service.GetGameRankingDownloadingByZone)
+
+		//search
+		MultiZoneFeature.GET("/search/game", service.SearchGameByZone)
+	}
+
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	engine.Run(":8084")
 	return engine

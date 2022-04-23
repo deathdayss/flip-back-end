@@ -17,6 +17,107 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/collect/check": {
+            "get": {
+                "description": "check whether the user has collected the game",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "check whether the user has collected the game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "GID",
+                        "name": "gid",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "UID",
+                        "name": "uid",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":http.StatusOK, \"msg\":true}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/collect/click": {
+            "get": {
+                "description": "allow user to collect a game",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "allow user to collect a game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "GID",
+                        "name": "gid",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "UID",
+                        "name": "uid",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":http.StatusOK, \"msg\":\"successfully collect/uncollect\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/collect/num": {
+            "get": {
+                "description": "get the collect number of a game",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get the collect number of a game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "GID",
+                        "name": "gid",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":http.StatusOK, \"count\":count}",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/download/game": {
             "get": {
                 "description": "get a game, return a zip",
@@ -95,16 +196,16 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/notoken/change/password": {
+        "/v1/notoken/change/answer": {
             "post": {
-                "description": "change a user's password",
+                "description": "vertify the answer to security question",
                 "consumes": [
                     "text/plain"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "vertify a user's email and change password",
+                "summary": "vertify the answer to security question",
                 "parameters": [
                     {
                         "description": "email",
@@ -127,6 +228,37 @@ const docTemplate = `{
                     {
                         "description": "answer",
                         "name": "answer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"message\":answer is correct}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/notoken/change/password": {
+            "post": {
+                "description": "change a user's password",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "change a user's password",
+                "parameters": [
+                    {
+                        "description": "email",
+                        "name": "email",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -156,7 +288,38 @@ const docTemplate = `{
                     "200": {
                         "description": "{\"status\":200, \"message\":update successfully}",
                         "schema": {
-                            "type": "json"
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/notoken/change/vertify": {
+            "post": {
+                "description": "vertify a user's password",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "vertify a user's email",
+                "parameters": [
+                    {
+                        "description": "email",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"message\":email is vertified}",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -510,12 +673,44 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "get security question list",
+                "summary": "get security question list with an input number",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "num",
                         "name": "num",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"list\":questionlist}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.QuestionItem"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/security/user/question": {
+            "get": {
+                "description": "get a user's security question list",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get a user's security question list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
                         "in": "header",
                         "required": true
                     }

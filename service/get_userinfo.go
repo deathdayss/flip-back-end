@@ -8,6 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary get a user's information
+// @Description get a user's information including its email, nickname according to uid
+// @Accept  plain
+// @Produce  json
+// @Param   id    header    int     true        "id"
+// @Success 200 {object} person  "{"status":200, "userinfo": userInfo}"
+// @Router /v1/info/getuserinfo [GET]
 func GetUserInfo(c *gin.Context) {
 	id, ok1 := c.GetPostForm("id")
 	if !ok1 || len(id) == 0 {

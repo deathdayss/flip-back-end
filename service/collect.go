@@ -8,6 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary allow user to collect a game
+// @Description allow user to collect a game
+// @Accept  plain
+// @Produce  json
+// @Param   gid     header    int     true        "GID"
+// @Param   uid     header    int     true        "UID"
+// @Success 200 {string} json  "{"status":http.StatusOK, "msg":"successfully collect/uncollect"}"
+// @Router /v1/collect/click  [GET]
 func CollectOrUncollect(c *gin.Context) {
 	gid := c.Query("GID")
 	uid := c.Query("UID")
@@ -27,6 +35,13 @@ func CollectOrUncollect(c *gin.Context) {
 	}
 }
 
+// @Summary get the collect number of a game
+// @Description get the collect number of a game
+// @Accept  plain
+// @Produce  json
+// @Param   gid     header    int     true        "GID"
+// @Success 200 {int} count  "{"status":http.StatusOK, "count":count}"
+// @Router /v1/collect/num  [GET]
 func GetCollectNum(c *gin.Context) {
 	gid := c.Query("GID")
 	count, err := repository.GetCollectNum(gid)
@@ -43,6 +58,14 @@ func GetCollectNum(c *gin.Context) {
 	}
 }
 
+// @Summary check whether the user has collected the game
+// @Description check whether the user has collected the game
+// @Accept  plain
+// @Produce  json
+// @Param   gid     header    int     true        "GID"
+// @Param   uid     header    int     true        "UID"
+// @Success 200 {string} json  "{"status":http.StatusOK, "msg":true}"
+// @Router /v1/collect/check  [GET]
 func HasCollect(c *gin.Context) {
 	gid := c.Query("GID")
 	uid := c.Query("UID")

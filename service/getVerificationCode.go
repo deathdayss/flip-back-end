@@ -13,6 +13,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary get security code
+// @Description get a random security code
+// @Accept  plain
+// @Produce  json
+// @Param   getCode     header    int     true        "getCode"
+// @Success 200 {string} json  "{"status":200, "content":code.Content,"url":code,URL}"
+// @Router /v1/verification/code [GET]
 func GetCode(c *gin.Context) {
 	getCode, err := strconv.Atoi(c.Query("getCode"))
 	if err != nil || getCode == 0 {

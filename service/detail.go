@@ -34,19 +34,21 @@ func GetUserDetail(c *gin.Context) {
 		return
 	}
 	detailDto := dto.PersonDetail{
-		Email: detail.Email,
-		Age: detail.Age,
+		Email:  detail.Email,
+		Age:    detail.Age,
 		Gender: detail.Gender,
-		Birth: detail.Birth,
+		Birth:  detail.Birth,
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"status":   200,
+		"status": 200,
 		"detail": detailDto,
 	})
 }
-var allowedField map[string]bool = map[string]bool{"Age":true, "Gender":true, "Birth":true, "Sign":true, "Nickname":true}
-// @Summary get a user's detail
-// @Description get a user's detail
+
+var allowedField map[string]bool = map[string]bool{"Age": true, "Gender": true, "Birth": true, "Sign": true, "Nickname": true}
+
+// @Summary change a user's detail
+// @Description change a user's detail
 // @Accept  plain
 // @Produce  json
 // @Param   token     header    string     true        "token"
@@ -89,6 +91,6 @@ func ChangeDetail(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status": http.StatusOK,
-		"msg": "set successfully",
+		"msg":    "set successfully",
 	})
 }

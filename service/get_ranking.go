@@ -29,7 +29,7 @@ func GetGameRanking(c *gin.Context) {
 	}
 	var offset int
 	offsetStr, ok := c.GetQuery("offset")
-	if ! ok {
+	if !ok {
 		offset = 0
 	} else {
 		offset, err = strconv.Atoi(offsetStr)
@@ -51,24 +51,24 @@ func GetGameRanking(c *gin.Context) {
 	}
 
 	rankList := []dto.RankItem{}
-	for _, ri := range (*rankInfo) {
+	for _, ri := range *rankInfo {
 		/*
-		fp, err := ioutil.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
-		if err != nil {
-			fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
-		}*/
+			fp, err := ioutil.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
+			if err != nil {
+				fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
+			}*/
 		rankList = append(rankList, dto.RankItem{
-			ID : ri.ID,
-			Name : ri.Name,
-			LikeNum: ri.LikeNum,
-			DownloadNum : ri.DownloadNum,
-			CommentNum : ri.CommentNum,
-			Img : ri.ImgUrl,
-			AuthorName : repository.FindNickName(ri.UID),
+			ID:          ri.ID,
+			Name:        ri.Name,
+			LikeNum:     ri.LikeNum,
+			DownloadNum: ri.DownloadNum,
+			CommentNum:  ri.CommentNum,
+			Img:         ri.ImgUrl,
+			AuthorName:  repository.FindNickName(ri.UID),
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"Status": 200,
-		"List": rankList,
+		"List":   rankList,
 	})
 }

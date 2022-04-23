@@ -51,6 +51,73 @@ info:
   title: FLIP backend API
   version: "1.0"
 paths:
+  /v1/collect/check:
+    get:
+      consumes:
+      - text/plain
+      description: check whether the user has collected the game
+      parameters:
+      - description: GID
+        in: header
+        name: gid
+        required: true
+        type: integer
+      - description: UID
+        in: header
+        name: uid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":http.StatusOK, "msg":true}'
+          schema:
+            type: string
+      summary: check whether the user has collected the game
+  /v1/collect/click:
+    get:
+      consumes:
+      - text/plain
+      description: allow user to collect a game
+      parameters:
+      - description: GID
+        in: header
+        name: gid
+        required: true
+        type: integer
+      - description: UID
+        in: header
+        name: uid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":http.StatusOK, "msg":"successfully collect/uncollect"}'
+          schema:
+            type: string
+      summary: allow user to collect a game
+  /v1/collect/num:
+    get:
+      consumes:
+      - text/plain
+      description: get the collect number of a game
+      parameters:
+      - description: GID
+        in: header
+        name: gid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":http.StatusOK, "count":count}'
+          schema:
+            type: int
+      summary: get the collect number of a game
   /v1/download/game:
     get:
       consumes:
@@ -102,11 +169,11 @@ paths:
         "200":
           description: ""
       summary: get a person's image
-  /v1/notoken/change/password:
+  /v1/notoken/change/answer:
     post:
       consumes:
       - text/plain
-      description: change a user's password
+      description: vertify the answer to security question
       parameters:
       - description: email
         in: body
@@ -123,6 +190,26 @@ paths:
       - description: answer
         in: body
         name: answer
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "message":answer is correct}'
+          schema:
+            type: string
+      summary: vertify the answer to security question
+  /v1/notoken/change/password:
+    post:
+      consumes:
+      - text/plain
+      description: change a user's password
+      parameters:
+      - description: email
+        in: body
+        name: email
         required: true
         schema:
           type: string
@@ -144,8 +231,28 @@ paths:
         "200":
           description: '{"status":200, "message":update successfully}'
           schema:
-            type: json
-      summary: vertify a user's email and change password
+            type: string
+      summary: change a user's password
+  /v1/notoken/change/vertify:
+    post:
+      consumes:
+      - text/plain
+      description: vertify a user's password
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "message":email is vertified}'
+          schema:
+            type: string
+      summary: vertify a user's email
   /v1/notoken/login:
     post:
       consumes:
@@ -391,7 +498,28 @@ paths:
             items:
               $ref: '#/definitions/dto.QuestionItem'
             type: array
-      summary: get security question list
+      summary: get security question list with an input number
+  /v1/security/user/question:
+    get:
+      consumes:
+      - text/plain
+      description: get a user's security question list
+      parameters:
+      - description: email
+        in: header
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "list":questionlist}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.QuestionItem'
+            type: array
+      summary: get a user's security question list
   /v1/user/change/detail:
     post:
       consumes:
