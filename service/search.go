@@ -9,23 +9,37 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary get game according to the like number in the same zone
-// @Description get game according to the like number in the same zone
+// @Summary search a game by keyword
+// @Description search a game by keyword
 // @Accept  plain
 // @Produce  json
-// @Param   num     header    int     true        "the number of the return itme"
-// @Param   zone     header    int     true        "the zone"
+// @Param   num     header    int     true        "the number of the return item"
+// @Param   keyword     header    string     true        "the keyword"
+// @Param   method  header     string true "the order method"
+// @Param   offset  header     int true "the offset"
 // @Success 200 {array} dto.RankItem   "{"status":200, "List":list}"
-// @Router /v1/rank/zone [GET]
-func GetGameRanking(c *gin.Context) {
+// @Router /v1/search/game [GET]
+func SearchGame(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
+	keyword := c.Query("keyword")
 	zone := c.Query("zone")
-	if err != nil || len(zone) == 0 {
+	if err != nil || len(keyword) == 0 {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
-			"error":  "num or zone is wrong",
+			"error":  "keyword or num is missing",
 		})
 		return
+	}
+	if err := repository.AddWord(keyword); err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "can not connect the redis db",
+		})
+		return
+	}
+	rankMtd, ok := c.GetQuery("method")
+	if !ok || (rankMtd != "like" && rankMtd != "download" && rankMtd != "comment") {
+		rankMtd = "time"
 	}
 	var offset int
 	offsetStr, ok := c.GetQuery("offset")
@@ -41,7 +55,7 @@ func GetGameRanking(c *gin.Context) {
 			return
 		}
 	}
-	rankInfo, err := repository.GetGameRanking(zone, num, offset)
+	rankInfo, err := repository.SearchGame(keyword, num, offset, rankMtd, zone)
 	if err != nil || len(*rankInfo) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,
@@ -49,7 +63,6 @@ func GetGameRanking(c *gin.Context) {
 		})
 		return
 	}
-
 	rankList := []dto.RankItem{}
 	for _, ri := range (*rankInfo) {
 		/*
@@ -70,5 +83,27 @@ func GetGameRanking(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"Status": 200,
 		"List": rankList,
+	})
+}
+
+func SearchRank(c *gin.Context) {
+	searchAns, err := repository.SearchRank()
+	if err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "internal error in redis db",
+		})
+		return
+	}
+	if len(searchAns) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"status": 404,
+			"error":  "no data",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status": 200,
+		"words": searchAns,
 	})
 }

@@ -10,6 +10,7 @@ import (
 
 func main() {
 	models.DbClient.Init()
+	models.InitRedisClient()
 	r := gin.New()
 	router.RegisterRouter(r, 
 		middleware.Cors(),

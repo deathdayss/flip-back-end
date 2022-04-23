@@ -116,6 +116,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	SearchFeature := engine.Group("/v1/search")
 	{
 		SearchFeature.GET("/game", service.SearchGame)
+		SearchFeature.GET("/rank", service.SearchRank)
 	}
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	engine.Run(":8084")

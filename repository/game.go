@@ -97,7 +97,7 @@ func GetGameRanking(zone string, num, offset int) (*[]models.Game, error) {
 	return &result, nil
 }
 
-func SearchGame(keyword string, num, offset int, mtd string) (*[]models.Game, error) {
+func SearchGame(keyword string, num, offset int, mtd, zone string) (*[]models.Game, error) {
 	result := []models.Game{}
 	var order string
 	switch mtd {
@@ -106,11 +106,16 @@ func SearchGame(keyword string, num, offset int, mtd string) (*[]models.Game, er
 	case "comment": order = "comment_num DESC"
 	default: order = "like_num DESC"
 	}
+	where := "1=1"
+	if zone != "" {
+		where = "zone="+zone
+	}
 	err := models.DbClient.MsClient.Where("name LIKE ?", "%"+keyword+"%").
-		Order(order).
-		Limit(num).
-		Offset(offset).
-		Find(&result).Error
+			Order(order).
+			Limit(num).
+			Offset(offset).
+			Where(where).
+			Find(&result).Error
 	if err != nil {
 		return nil, err
 	}
