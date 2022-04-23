@@ -40,6 +40,7 @@ func GetGameRankingDownloading(c *gin.Context) {
 			})
 			return
 		}
+		offset = offset * (num-1)
 	}
 	rankInfo, err := repository.GetGameRankingDownloading(zone, num, offset)
 	if err != nil || len(*rankInfo) == 0 {

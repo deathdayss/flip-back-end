@@ -84,6 +84,7 @@ func GetCommentRanking(c *gin.Context) {
 			})
 			return
 		}
+		offset = offset * (num-1)
 	}
 	rankInfo, err := repository.GetCommentRanking(zone, num, rankMtd, offset)
 	if err != nil || len(*rankInfo) == 0 {

@@ -98,6 +98,35 @@ func GetGameRanking(zone string, num, offset int) (*[]models.Game, error) {
 	return &result, nil
 }
 
+type PersonID struct {
+	ID int `gorm:"column:id`
+}
+
+func SearchPerson(keyword string, num, offset int, mtd string) (*[]PersonID, error) {
+	result := make([]PersonID, 0)
+	var order string
+	switch mtd {
+	case "like":
+		order = "sum(like_num) DESC"
+	case "download":
+		order = "sum(download_num) DESC"
+	case "comment":
+		order = "sum(comment_num) DESC"
+	default:
+		order = "sum(like_num) DESC"
+	}
+	err := models.DbClient.MsClient.Model(&models.Person{}).
+			Select("people.id").
+			Joins("JOIN games on people.id = games.uid").
+			Where("people.nickname like ?", "%"+keyword+"%").
+			Group("people.id").
+			Order(order).Offset(offset).Limit(num).Find(&result).
+			Error
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
 func SearchGame(keyword string, num, offset int, mtd, zone string) (*[]models.Game, error) {
 	result := []models.Game{}
 	var order string
