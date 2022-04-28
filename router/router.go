@@ -116,8 +116,9 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	}
 	SearchFeature := engine.Group("/v1/search")
 	{
-		SearchFeature.GET("/item/:mode", service.Search)
+		SearchFeature.GET("/item/:mode", middleware.Auth(), service.Search)
 		SearchFeature.GET("/rank/:mode", service.SearchRank)
+		SearchFeature.GET("/history", middleware.Auth(), service.GetSearchHistory)
 	}
 
 	MultiZoneFeature := engine.Group("/v2")

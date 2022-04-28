@@ -114,6 +114,17 @@ func Search(c *gin.Context) {
 		})
 		return
 	}
+	email, ok := c.Get("email")
+	if ok {
+		err := repository.AddSearchHistory(email.(string), keyword)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{
+				"status": 406,
+				"error": "redis server can not add the search key to history",
+			})
+			return
+		}
+	}
 	mode := c.Param("mode")
 	if mode != "game" && mode != "person" {
 		c.JSON(http.StatusNotAcceptable, gin.H{
@@ -195,6 +206,29 @@ func Search(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"Status": 200,
 		"List":   rankList,
+	})
+}
+
+func GetSearchHistory(c *gin.Context) {
+	email, ok := c.Get("email")
+	if !ok {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "email is missing",
+		})
+		return
+	}
+	history, err := repository.GetSearchHistory(email.(string))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": 406,
+			"error":  "redis server error ",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+		"history": history,
 	})
 }
 
