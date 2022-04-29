@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"reflect"
 	"strconv"
 
@@ -147,4 +148,50 @@ func ChangeDetail(email string, fieldName string, fieldVal string) error {
 	}
 	tx.Commit()
 	return nil
+}
+
+func ChangeIcon(id int, fieldVal string) error {
+	tx := models.DbClient.MsClient.Begin()
+
+	if err := tx.Model(&models.PersonImg{}).Where("id=?", id).Update("url", fieldVal).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
+
+}
+
+func GetPersonalProduct(id int, mtd string) (*[]models.GameRescale, error) {
+	result := []models.GameRescale{}
+
+	//sub_query := models.DbClient.MsClient.Model(&models.Zone{}).Select("id").Where("zone = ?", zone)
+
+	var order string
+	switch mtd {
+	case "like":
+		order = "like_num DESC"
+	case "download":
+		order = "download_num DESC"
+	case "comment":
+		order = "comment_num DESC"
+	default:
+		order = "like_num DESC"
+	}
+
+	err := models.DbClient.MsClient.Debug().Model(&models.GameRescale{}).
+		Select("id", "name", "like_num", "download_num", "comment_num", "img_url", "uid", "file_url").
+		Where("uid = ?", id).
+		Order(order).
+		Find(&result).Error
+
+	if err != nil {
+		return nil, err
+	}
+	actualLen := len(result)
+	if actualLen == 0 {
+		return nil, errors.New("No data")
+	}
+	return &result, nil
+
 }

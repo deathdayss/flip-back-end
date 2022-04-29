@@ -26,6 +26,21 @@ definitions:
       id:
         type: integer
     type: object
+  dto.RankComment:
+    properties:
+      CID:
+        type: integer
+      GID:
+        type: integer
+      UID:
+        type: integer
+      comment:
+        type: string
+      create_time:
+        type: string
+      like_num:
+        type: integer
+    type: object
   dto.RankItem:
     properties:
       GID:
@@ -43,6 +58,36 @@ definitions:
       like_num:
         type: integer
     type: object
+  dto.RankItemByZone:
+    properties:
+      GID:
+        type: integer
+      authorName:
+        type: string
+      clickCount:
+        type: integer
+      commentNum:
+        type: integer
+      downloadNum:
+        type: integer
+      game_name:
+        type: string
+      img:
+        type: string
+      like_num:
+        type: integer
+    type: object
+  models.Person:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      nickname:
+        type: string
+      password:
+        type: string
+    type: object
 host: localhost:8084
 info:
   contact: {}
@@ -51,6 +96,58 @@ info:
   title: FLIP backend API
   version: "1.0"
 paths:
+  /v1/change/comment/add:
+    post:
+      consumes:
+      - text/plain
+      description: add a comment
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: gameid
+        in: body
+        name: game_id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "message":the comment has bee added}'
+          schema:
+            type: string
+      summary: add a comment
+  /v1/change/commentcomment/up:
+    post:
+      consumes:
+      - text/plain
+      description: update a comment
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: comment_id
+        in: body
+        name: comment_id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "message":"the comment has been up"}'
+          schema:
+            type: string
+      summary: update a comment
   /v1/collect/check:
     get:
       consumes:
@@ -169,6 +266,93 @@ paths:
         "200":
           description: ""
       summary: get a person's image
+  /v1/info/getuserinfo:
+    get:
+      consumes:
+      - text/plain
+      description: get a user's information including its email, nickname according
+        to uid
+      parameters:
+      - description: id
+        in: header
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "userinfo": userInfo}'
+          schema:
+            $ref: '#/definitions/models.Person'
+      summary: get a user's information
+  /v1/like/check:
+    get:
+      consumes:
+      - text/plain
+      description: check whether the user has liked the game
+      parameters:
+      - description: GID
+        in: header
+        name: gid
+        required: true
+        type: integer
+      - description: UID
+        in: header
+        name: uid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":http.StatusOK, "msg":true}'
+          schema:
+            type: string
+      summary: check whether the user has liked the game
+  /v1/like/click:
+    get:
+      consumes:
+      - text/plain
+      description: allow user to like a game
+      parameters:
+      - description: GID
+        in: header
+        name: gid
+        required: true
+        type: integer
+      - description: UID
+        in: header
+        name: uid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":http.StatusOK, "msg":"successfully like/unlike"}'
+          schema:
+            type: string
+      summary: allow user to like a game
+  /v1/like/num:
+    get:
+      consumes:
+      - text/plain
+      description: get the like number of a game
+      parameters:
+      - description: GID
+        in: header
+        name: gid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":http.StatusOK, "count":count}'
+          schema:
+            type: int
+      summary: get the like number of a game
   /v1/notoken/change/answer:
     post:
       consumes:
@@ -390,59 +574,7 @@ paths:
               $ref: '#/definitions/dto.AuthorItem'
             type: array
       summary: get anuthor rank by zone
-  /v1/rank/download:
-    get:
-      consumes:
-      - text/plain
-      description: get game according to the download number in the same zone
-      parameters:
-      - description: the number of the return itme
-        in: header
-        name: num
-        required: true
-        type: integer
-      - description: the zone
-        in: header
-        name: zone
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"status":200, "List":list}'
-          schema:
-            items:
-              $ref: '#/definitions/dto.RankItem'
-            type: array
-      summary: get game according to the download number in the same zone
-  /v1/rank/zone:
-    get:
-      consumes:
-      - text/plain
-      description: get game according to the like number in the same zone
-      parameters:
-      - description: the number of the return itme
-        in: header
-        name: num
-        required: true
-        type: integer
-      - description: the zone
-        in: header
-        name: zone
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"status":200, "List":list}'
-          schema:
-            items:
-              $ref: '#/definitions/dto.RankItem'
-            type: array
-      summary: get game according to the like number in the same zone
-  /v1/search/game:
+  /v1/rank/comment/time:
     get:
       consumes:
       - text/plain
@@ -453,14 +585,9 @@ paths:
         name: num
         required: true
         type: integer
-      - description: the keyword
+      - description: GID
         in: header
-        name: keyword
-        required: true
-        type: string
-      - description: the order method
-        in: header
-        name: method
+        name: GID
         required: true
         type: string
       - description: the offset
@@ -468,16 +595,110 @@ paths:
         name: offset
         required: true
         type: integer
+      - description: the order method
+        in: header
+        name: method
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: '{"status":200, "List":list}'
+          description: '{"status":200, "List":ranklist}'
           schema:
             items:
-              $ref: '#/definitions/dto.RankItem'
+              $ref: '#/definitions/dto.RankComment'
             type: array
       summary: search a game by keyword
+  /v1/rank/download:
+    get:
+      consumes:
+      - text/plain
+      description: get game rank by zone odered by downloading
+      parameters:
+      - description: num
+        in: header
+        name: num
+        required: true
+        type: integer
+      - description: zone
+        in: header
+        name: zone
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "list":ranklist}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.RankItemByZone'
+            type: array
+      summary: get game rank by zone
+  /v1/rank/zone:
+    get:
+      consumes:
+      - text/plain
+      description: get game rank by zone ordered by like, download or comment with
+        default like
+      parameters:
+      - description: num
+        in: header
+        name: num
+        required: true
+        type: integer
+      - description: zone
+        in: header
+        name: zone
+        required: true
+        type: string
+      - description: like, download or comment with default like
+        in: header
+        name: method
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "list":ranklist}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.RankItemByZone'
+            type: array
+      summary: get game rank by zone
+  /v1/search/game:
+    get:
+      consumes:
+      - text/plain
+      description: search game ordered by like, download or comment with default like
+      parameters:
+      - description: num
+        in: header
+        name: num
+        required: true
+        type: integer
+      - description: keyword
+        in: header
+        name: keyword
+        required: true
+        type: string
+      - description: like, download or comment with default like
+        in: header
+        name: method
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "list":ranklist}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.RankItemByZone'
+            type: array
+      summary: search game
   /v1/security/question:
     get:
       consumes:
@@ -543,7 +764,7 @@ paths:
     post:
       consumes:
       - text/plain
-      description: get a user's detail
+      description: change a user's detail
       parameters:
       - description: token
         in: header
@@ -569,7 +790,26 @@ paths:
           description: '{"status":200, "msg": "set successfully"}'
           schema:
             type: json
-      summary: get a user's detail
+      summary: change a user's detail
+  /v1/verification/code:
+    get:
+      consumes:
+      - text/plain
+      description: get a random security code
+      parameters:
+      - description: getCode
+        in: header
+        name: getCode
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "content":code.Content,"url":code,URL}'
+          schema:
+            type: string
+      summary: get security code
 securityDefinitions:
   JWT:
     type: basic

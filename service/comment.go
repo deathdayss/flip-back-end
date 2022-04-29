@@ -9,6 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary update a comment
+// @Description update a comment
+// @Accept  plain
+// @Produce  json
+// @Param   email    body    string     true        "email"
+// @Param   comment_id     body    int     true        "comment_id"
+// @Success 200 {string} json   "{"status":200, "message":"the comment has been up"}"
+// @Router /v1/change/commentcomment/up [POST]
 func UpComment(c *gin.Context) {
 	emailIt, ok := c.Get("email")
 	if !ok {
@@ -57,6 +65,16 @@ func UpComment(c *gin.Context) {
 	})
 }
 
+// @Summary search a game by keyword
+// @Description search a game by keyword
+// @Accept  plain
+// @Produce  json
+// @Param   num     header    int     true        "the number of the return item"
+// @Param   GID     header    string     true        "GID"
+// @Param   offset  header     int true "the offset"
+// @Param   method  header     string true "the order method"
+// @Success 200 {array} dto.RankComment  "{"status":200, "List":ranklist}"
+// @Router /v1/rank/comment/time [GET]
 func GetCommentRanking(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	zone := c.Query("GID")
@@ -116,6 +134,14 @@ func GetCommentRanking(c *gin.Context) {
 	})
 }
 
+// @Summary add a comment
+// @Description add a comment
+// @Accept  plain
+// @Produce  json
+// @Param   email    body    string     true        "email"
+// @Param   game_id     body    int     true        "gameid"
+// @Success 200 {string} json   "{"status":200, "message":the comment has bee added}"
+// @Router /v1/change/comment/add [POST]
 func AddComment(c *gin.Context) {
 	emailIt, ok := c.Get("email")
 	if !ok {
