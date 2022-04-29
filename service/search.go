@@ -11,16 +11,6 @@ import (
 
 var AllowedGameMtd map[string]bool = map[string]bool{"like": true, "download": true, "comment": true, "time": true}
 
-// @Summary search a game by keyword
-// @Description search a game by keyword
-// @Accept  plain
-// @Produce  json
-// @Param   num     header    int     true        "the number of the return item"
-// @Param   keyword     header    string     true        "the keyword"
-// @Param   method  header     string true "the order method"
-// @Param   offset  header     int true "the offset"
-// @Success 200 {array} dto.RankItem   "{"status":200, "List":list}"
-// @Router /v1/search/game [GET]
 func SearchPerson(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	keyword := c.Query("keyword")
@@ -93,16 +83,17 @@ func SearchPerson(c *gin.Context) {
 	})
 }
 
-// @Summary search a game by keyword
+// @Summary search a game or person by keyword
 // @Description search a game by keyword
 // @Accept  plain
 // @Produce  json
 // @Param   num     header    int     true        "the number of the return item"
 // @Param   keyword     header    string     true        "the keyword"
 // @Param   method  header     string true "the order method"
+// @Param   zone  header     string true "the zone searched"
 // @Param   offset  header     int true "the offset"
 // @Success 200 {array} dto.RankItem   "{"status":200, "List":list}"
-// @Router /v1/search/:mode [GET]
+// @Router /v1/search/item/:mode [GET]
 func Search(c *gin.Context) {
 	num, err := strconv.Atoi(c.Query("num"))
 	keyword := c.Query("keyword")
@@ -209,6 +200,13 @@ func Search(c *gin.Context) {
 	})
 }
 
+// @Summary get a user's search history
+// @Description get a user's search history
+// @Accept  plain
+// @Produce  json
+// @Param   token     header    string     true        "the user's token"
+// @Success 200 {array} string   "{"status":200, "words":list}"
+// @Router /v1/search/history [GET]
 func GetSearchHistory(c *gin.Context) {
 	email, ok := c.Get("email")
 	if !ok {
@@ -232,6 +230,13 @@ func GetSearchHistory(c *gin.Context) {
 	})
 }
 
+// @Summary get game/person search rank
+// @Description get game/person search rank
+// @Accept  plain
+// @Produce  json
+// @Param   token     header    string     true        "the user's token"
+// @Success 200 {array} string   "{"status":200, "words":list}"
+// @Router /v1/search/rank/:mode [GET]
 func SearchRank(c *gin.Context) {
 	mode := c.Param("mode")
 	if mode != "person" && mode != "game" {

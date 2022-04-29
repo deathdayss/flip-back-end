@@ -1,6 +1,10 @@
 package models
 
-import "github.com/go-redis/redis"
+import (
+	"fmt"
+
+	"github.com/go-redis/redis"
+)
 
 var RDB *redis.Client
 
@@ -13,6 +17,7 @@ func InitRedisClient() (err error) {
 
     _, err = RDB.Ping().Result()
     if err != nil {
+        fmt.Println(err)
         return err
     }
     return nil

@@ -10,7 +10,6 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
         "contact": {},
         "version": "{{.Version}}"
     },
@@ -192,6 +191,136 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": ""
+                    }
+                }
+            }
+        },
+        "/v1/info/getuserinfo": {
+            "get": {
+                "description": "get a user's information including its email, nickname according to uid",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get a user's information",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"userinfo\": userInfo}",
+                        "schema": {
+                            "$ref": "#/definitions/models.Person"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/like/check": {
+            "get": {
+                "description": "check whether the user has liked the game",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "check whether the user has liked the game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "GID",
+                        "name": "gid",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "UID",
+                        "name": "uid",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":http.StatusOK, \"msg\":true}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/like/click": {
+            "get": {
+                "description": "allow user to like a game",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "allow user to like a game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "GID",
+                        "name": "gid",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "UID",
+                        "name": "uid",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":http.StatusOK, \"msg\":\"successfully like/unlike\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/like/num": {
+            "get": {
+                "description": "get the like number of a game",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get the like number of a game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "GID",
+                        "name": "gid",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":http.StatusOK, \"count\":count}",
+                        "schema": {
+                            "type": "int"
+                        }
                     }
                 }
             }
@@ -535,25 +664,25 @@ const docTemplate = `{
         },
         "/v1/rank/download": {
             "get": {
-                "description": "get game according to the download number in the same zone",
+                "description": "get game rank by zone odered by downloading",
                 "consumes": [
                     "text/plain"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "get game according to the download number in the same zone",
+                "summary": "get game rank by zone",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "the number of the return itme",
+                        "description": "num",
                         "name": "num",
                         "in": "header",
                         "required": true
                     },
                     {
-                        "type": "integer",
-                        "description": "the zone",
+                        "type": "string",
+                        "description": "zone",
                         "name": "zone",
                         "in": "header",
                         "required": true
@@ -561,11 +690,11 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"status\":200, \"List\":list}",
+                        "description": "{\"status\":200, \"list\":ranklist}",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.RankItem"
+                                "$ref": "#/definitions/dto.RankItemByZone"
                             }
                         }
                     }
@@ -574,37 +703,44 @@ const docTemplate = `{
         },
         "/v1/rank/zone": {
             "get": {
-                "description": "get game according to the like number in the same zone",
+                "description": "get game rank by zone ordered by like, download or comment with default like",
                 "consumes": [
                     "text/plain"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "get game according to the like number in the same zone",
+                "summary": "get game rank by zone",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "the number of the return itme",
+                        "description": "num",
                         "name": "num",
                         "in": "header",
                         "required": true
                     },
                     {
-                        "type": "integer",
-                        "description": "the zone",
+                        "type": "string",
+                        "description": "zone",
                         "name": "zone",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "like, download or comment with default like",
+                        "name": "method",
                         "in": "header",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"status\":200, \"List\":list}",
+                        "description": "{\"status\":200, \"list\":ranklist}",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.RankItem"
+                                "$ref": "#/definitions/dto.RankItemByZone"
                             }
                         }
                     }
@@ -613,6 +749,84 @@ const docTemplate = `{
         },
         "/v1/search/game": {
             "get": {
+                "description": "search game ordered by like, download or comment with default like",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "search game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "num",
+                        "name": "num",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "keyword",
+                        "name": "keyword",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "like, download or comment with default like",
+                        "name": "method",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"list\":ranklist}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.RankItemByZone"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/search/history": {
+            "get": {
+                "description": "get a user's search history",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get a user's search history",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "the user's token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"words\":list}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/search/item/:mode": {
+            "get": {
                 "description": "search a game by keyword",
                 "consumes": [
                     "text/plain"
@@ -620,7 +834,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "search a game by keyword",
+                "summary": "search a game or person by keyword",
                 "parameters": [
                     {
                         "type": "integer",
@@ -644,6 +858,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "string",
+                        "description": "the zone searched",
+                        "name": "zone",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "the offset",
                         "name": "offset",
@@ -658,6 +879,38 @@ const docTemplate = `{
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/dto.RankItem"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/search/rank/:mode": {
+            "get": {
+                "description": "get game/person search rank",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get game/person search rank",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "the user's token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"words\":list}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
                             }
                         }
                     }
@@ -759,14 +1012,14 @@ const docTemplate = `{
         },
         "/v1/user/detail": {
             "post": {
-                "description": "get a user's detail",
+                "description": "change a user's detail",
                 "consumes": [
                     "text/plain"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "get a user's detail",
+                "summary": "change a user's detail",
                 "parameters": [
                     {
                         "type": "string",
@@ -799,6 +1052,35 @@ const docTemplate = `{
                         "description": "{\"status\":200, \"msg\": \"set successfully\"}",
                         "schema": {
                             "type": "json"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/verification/code": {
+            "get": {
+                "description": "get a random security code",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get security code",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "getCode",
+                        "name": "getCode",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"content\":code.Content,\"url\":code,URL}",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -873,23 +1155,64 @@ const docTemplate = `{
                     "type": "integer"
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "JWT": {
-            "type": "basic"
+        },
+        "dto.RankItemByZone": {
+            "type": "object",
+            "properties": {
+                "GID": {
+                    "type": "integer"
+                },
+                "authorName": {
+                    "type": "string"
+                },
+                "clickCount": {
+                    "type": "integer"
+                },
+                "commentNum": {
+                    "type": "integer"
+                },
+                "downloadNum": {
+                    "type": "integer"
+                },
+                "game_name": {
+                    "type": "string"
+                },
+                "img": {
+                    "type": "string"
+                },
+                "like_num": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Person": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:8084",
+	Version:          "",
+	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "FLIP backend API",
-	Description:      "FLIP backend server.",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
