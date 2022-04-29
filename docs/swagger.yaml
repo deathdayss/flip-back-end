@@ -26,6 +26,21 @@ definitions:
       id:
         type: integer
     type: object
+  dto.RankComment:
+    properties:
+      CID:
+        type: integer
+      GID:
+        type: integer
+      UID:
+        type: integer
+      comment:
+        type: string
+      create_time:
+        type: string
+      like_num:
+        type: integer
+    type: object
   dto.RankItem:
     properties:
       GID:
@@ -76,6 +91,58 @@ definitions:
 info:
   contact: {}
 paths:
+  /v1/change/comment/add:
+    post:
+      consumes:
+      - text/plain
+      description: add a comment
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: gameid
+        in: body
+        name: game_id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "message":the comment has bee added}'
+          schema:
+            type: string
+      summary: add a comment
+  /v1/change/commentcomment/up:
+    post:
+      consumes:
+      - text/plain
+      description: update a comment
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: comment_id
+        in: body
+        name: comment_id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "message":"the comment has been up"}'
+          schema:
+            type: string
+      summary: update a comment
   /v1/collect/check:
     get:
       consumes:
@@ -502,6 +569,42 @@ paths:
               $ref: '#/definitions/dto.AuthorItem'
             type: array
       summary: get anuthor rank by zone
+  /v1/rank/comment/time:
+    get:
+      consumes:
+      - text/plain
+      description: search a game by keyword
+      parameters:
+      - description: the number of the return item
+        in: header
+        name: num
+        required: true
+        type: integer
+      - description: GID
+        in: header
+        name: GID
+        required: true
+        type: string
+      - description: the offset
+        in: header
+        name: offset
+        required: true
+        type: integer
+      - description: the order method
+        in: header
+        name: method
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status":200, "List":ranklist}'
+          schema:
+            items:
+              $ref: '#/definitions/dto.RankComment'
+            type: array
+      summary: search a game by keyword
   /v1/rank/download:
     get:
       consumes:

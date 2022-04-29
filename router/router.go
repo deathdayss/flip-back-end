@@ -122,6 +122,11 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		SearchFeature.GET("/notoken/rank/:mode", service.SearchRank)
 		SearchFeature.GET("/history", middleware.Auth(), service.GetSearchHistory)
 	}
+	PersonalZoneFeature := engine.Group("/v1/personalzone")
+	{
+		PersonalZoneFeature.GET("/product", service.GetPersonalProduct)
+		PersonalZoneFeature.POST("/changeico", service.ChangeIcon)
+	}
 
 	MultiZoneFeature := engine.Group("/v2")
 	{

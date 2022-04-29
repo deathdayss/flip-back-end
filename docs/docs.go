@@ -16,6 +16,86 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/change/comment/add": {
+            "post": {
+                "description": "add a comment",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "add a comment",
+                "parameters": [
+                    {
+                        "description": "email",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "gameid",
+                        "name": "game_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"message\":the comment has bee added}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/change/commentcomment/up": {
+            "post": {
+                "description": "update a comment",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "update a comment",
+                "parameters": [
+                    {
+                        "description": "email",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "comment_id",
+                        "name": "comment_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"message\":\"the comment has been up\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/collect/check": {
             "get": {
                 "description": "check whether the user has collected the game",
@@ -662,6 +742,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/rank/comment/time": {
+            "get": {
+                "description": "search a game by keyword",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "search a game by keyword",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "the number of the return item",
+                        "name": "num",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "GID",
+                        "name": "GID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "the offset",
+                        "name": "offset",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "the order method",
+                        "name": "method",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"status\":200, \"List\":ranklist}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.RankComment"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/rank/download": {
             "get": {
                 "description": "get game rank by zone odered by downloading",
@@ -1126,6 +1259,29 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.RankComment": {
+            "type": "object",
+            "properties": {
+                "CID": {
+                    "type": "integer"
+                },
+                "GID": {
+                    "type": "integer"
+                },
+                "UID": {
+                    "type": "integer"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "create_time": {
+                    "type": "string"
+                },
+                "like_num": {
                     "type": "integer"
                 }
             }

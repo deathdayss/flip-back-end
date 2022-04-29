@@ -15,6 +15,7 @@ import (
 // @Produce  json
 // @Param   num     header    int     true        "the number of the return itme"
 // @Param   zone     header    int     true        "the zone"
+// @Param   offset  header     int true "the offset"
 // @Success 200 {array} dto.RankItem   "{"status":200, "List":list}"
 // @Router /v1/rank/zone [GET]
 func GetGameRanking(c *gin.Context) {
