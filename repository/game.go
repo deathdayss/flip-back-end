@@ -140,15 +140,14 @@ func SearchGame(keyword string, num, offset int, mtd, zone string) (*[]models.Ga
 	default:
 		order = "like_num DESC"
 	}
-	where := "1=1"
-	if zone != "" {
-		where = "zone="+zone
-	}
-	err := models.DbClient.MsClient.Where("name LIKE ?", "%"+keyword+"%").
+	// where := "1=1"
+	// if zone != "" {
+	// 	where = "zone="+zone
+	// }
+	err := models.DbClient.MsClient.Debug().Where("name LIKE ?", "%"+keyword+"%").
 			Order(order).
 			Limit(num).
-			Offset(offset).
-			Where(where).
+			Offset(offset).Where("zone = ?", zone).
 			Find(&result).Error
 	if err != nil {
 		return nil, err
