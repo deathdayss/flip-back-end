@@ -144,11 +144,16 @@ func SearchGame(keyword string, num, offset int, mtd, zone string) (*[]models.Ga
 	// if zone != "" {
 	// 	where = "zone="+zone
 	// }
-	err := models.DbClient.MsClient.Debug().Where("name LIKE ?", "%"+keyword+"%").
+	tx := models.DbClient.MsClient.Debug().Where("name LIKE ?", "%"+keyword+"%").
 			Order(order).
 			Limit(num).
-			Offset(offset).Where("zone = ?", zone).
-			Find(&result).Error
+			Offset(offset)
+	var err error
+	if zone != "" {
+		err = tx.Where("zone=?", zone).Find(&result).Error
+	} else {
+		err = tx.Find(&result).Error
+	}
 	if err != nil {
 		return nil, err
 	}
