@@ -12,6 +12,70 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func ChangeFile(c *gin.Context) {
+	_, ok := c.Get("email")
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"status": 401,
+			"error":  "unauth token",
+		})
+		return
+	}
+	file, err := c.FormFile("file_body")
+	gidStr, ok := c.GetPostForm("gid")
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": 400,
+			"error":  "no gid",
+		})
+		return
+	}
+	gid, err := strconv.Atoi(gidStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": 400,
+			"error":  err.Error(),
+		})
+		return
+	}
+	filename := file.Filename
+	ss := strings.Split(filename, ".")
+	if len(ss) < 2 || (strings.ToLower(ss[1]) != "zip" && strings.ToLower(ss[1]) != "ZIP") {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": "the zip name is wrong",
+		})
+		return
+	}
+	err = repository.DeleteFile(gid)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": "the original file is error",
+		})
+		return
+	}
+	fileType := ss[1]
+	saveName := strconv.Itoa(gid) + "." + fileType
+	if _, err := os.Stat("./storage/game/"+saveName); os.IsExist(err) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": "the game can not save",
+		})
+		return
+	}
+	if err := c.SaveUploadedFile(file, "./storage/game/"+saveName); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error": "the game id is wrong",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+		"ID" : gid,
+	})
+}
 var ProcessMap sync.Map = sync.Map{}
 func UploadZip(c *gin.Context) {
 	emailIt, ok := c.Get("email")

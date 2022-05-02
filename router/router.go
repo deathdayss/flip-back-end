@@ -124,8 +124,10 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 	}
 	PersonalZoneFeature := engine.Group("/v1/personalzone")
 	{
+		PersonalZoneFeature.Use(middleware.Auth())
 		PersonalZoneFeature.GET("/product", service.GetPersonalProduct)
 		PersonalZoneFeature.POST("/changeico", service.ChangeIcon)
+		PersonalZoneFeature.POST("/replace", service.ChangeFile)
 	}
 
 	MultiZoneFeature := engine.Group("/v2")

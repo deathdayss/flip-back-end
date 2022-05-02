@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"os"
 
 	"github.com/deathdayss/flip-back-end/models"
 )
@@ -29,10 +30,30 @@ func DeleteGame(id int) error {
 	g := models.Game{
 		ID: id,
 	}
+	if err := DeleteFile(id); err != nil {
+		return err
+	}
 	if err := models.DbClient.MsClient.Model(&models.Game{}).Delete(&g).Error; err != nil {
 		return err
 	}
 	return nil
+}
+
+func DeleteFile(id int) error {
+	g := models.Game{
+		ID: id,
+	}
+	if err := models.DbClient.MsClient.Model(&models.Game{}).Find(&g).Error; err != nil {
+		return err
+	}
+	if g.FileUrl != "" {
+		path := "./storage/game/"+g.FileUrl
+		if err := os.Remove(path); err != nil {
+			return err
+		}
+	}
+	return nil
+
 }
 func UpdateGameFileUrl(id int, fileUrl string) error {
 	g := models.Game{
