@@ -150,15 +150,17 @@ func ChangeDetail(email string, fieldName string, fieldVal string) error {
 	return nil
 }
 
-func ChangeIcon(id int, fieldVal string) error {
+func ChangeIcon(id int, fileType string) (string, error) {
+
+	saveName := strconv.Itoa(id) + "." + fileType
 	tx := models.DbClient.MsClient.Begin()
 
-	if err := tx.Model(&models.PersonImg{}).Where("id=?", id).Update("url", fieldVal).Error; err != nil {
+	if err := tx.Model(&models.PersonImg{}).Where("id=?", id).Update("url", saveName).Error; err != nil {
 		tx.Rollback()
-		return err
+		return "", err
 	}
 	tx.Commit()
-	return nil
+	return saveName, nil
 
 }
 

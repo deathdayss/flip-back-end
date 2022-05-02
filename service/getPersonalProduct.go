@@ -2,7 +2,9 @@ package service
 
 import (
 	"net/http"
+	"os"
 	"strconv"
+	"strings"
 
 	"github.com/deathdayss/flip-back-end/dto"
 	"github.com/deathdayss/flip-back-end/repository"
@@ -61,11 +63,11 @@ func GetPersonalProduct(c *gin.Context) {
 
 func ChangeIcon(c *gin.Context) {
 	email, ok1 := c.GetPostForm("email")
-	icon, ok2 := c.GetPostForm("icon")
-	if !ok1 || !ok2 || len(icon) == 0 || len(email) == 0 {
+
+	if !ok1 || len(email) == 0 {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status": 406,
-			"error":  "email or icon is missing",
+			"error":  "email is missing",
 		})
 		return
 	}
@@ -78,16 +80,69 @@ func ChangeIcon(c *gin.Context) {
 		return
 	}
 
-	if err := repository.ChangeIcon(pid, icon); err != nil {
+	url := repository.FindURL(pid)
+
+	if url != "default.jpg" {
+
+		if err := os.Remove("./storage/personal/" + url); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"status": http.StatusBadRequest,
+				"error":  "the person id is wrong",
+			})
+			return
+		}
+	}
+
+	file, err := c.FormFile("file_body")
+
+	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status": 401,
-			"error":  "can not set the new ico",
+			"error":  "can not auth the file",
 		})
 		return
 	}
+
+	filename := file.Filename
+	ss := strings.Split(filename, ".")
+	if len(ss) < 2 || (strings.ToLower(ss[1]) != "jpg" && strings.ToLower(ss[1]) != "png") {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error":  "the img name is wrong",
+		})
+		return
+	}
+	fileType := ss[1]
+
+	saveName, err := repository.ChangeIcon(pid, fileType)
+
+	if _, err := os.Stat("./storage/personal/" + saveName); os.IsExist(err) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error":  "the user has been saved",
+		})
+		return
+	}
+
+	if err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status": 406,
+			"error":  "can not upload",
+		})
+		return
+	}
+
+	if err := c.SaveUploadedFile(file, "./storage/personal/"+saveName); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error":  "the person id is wrong",
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"status": http.StatusOK,
-		"msg":    "new icon set successfully",
+		"status":  200,
+		"message": "Change Icon successfully",
 	})
 
 }
