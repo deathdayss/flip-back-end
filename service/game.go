@@ -116,6 +116,7 @@ func UploadZip(c *gin.Context) {
 		return
 	}
 	if err := c.SaveUploadedFile(file, "./storage/game/"+saveName); err != nil {
+		repository.DeleteGame(processID)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": http.StatusBadRequest,
 			"error": "the game id is wrong",
@@ -123,6 +124,7 @@ func UploadZip(c *gin.Context) {
 		return
 	}
 	if err != nil {
+		repository.DeleteGame(processID)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": http.StatusBadRequest,
 			"error": "can not create game",

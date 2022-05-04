@@ -30,9 +30,7 @@ func DeleteGame(id int) error {
 	g := models.Game{
 		ID: id,
 	}
-	if err := DeleteFile(id); err != nil {
-		return err
-	}
+	DeleteFile(id)
 	if err := models.DbClient.MsClient.Model(&models.Game{}).Delete(&g).Error; err != nil {
 		return err
 	}
