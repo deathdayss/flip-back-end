@@ -133,7 +133,6 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 
 	MultiZoneFeature := engine.Group("/v2")
 	{
-
 		//search
 		MultiZoneFeature.GET("/search/game", service.SearchGameByZone)
 	}
@@ -157,7 +156,6 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		//getRanking
 		MultiZoneFeature_Ranking.GET("/zone", service.GetGameRankingByMultiZone)
 		MultiZoneFeature_Ranking.GET("/download", service.GetGameRankingDownloadingByZone)
-		MultiZoneFeature_Ranking.GET("/author", service.GetAurthorRankingByZone)
 	}
 
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
