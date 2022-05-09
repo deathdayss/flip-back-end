@@ -45,7 +45,7 @@ func DeleteFile(id int) error {
 		return err
 	}
 	if g.FileUrl != "" {
-		path := "./storage/game/"+g.FileUrl
+		path := "./storage/game/" + g.FileUrl
 		if err := os.Remove(path); err != nil {
 			return err
 		}
@@ -139,12 +139,12 @@ func SearchPerson(keyword string, num, offset int, mtd string) (*[]PersonID, err
 		return nil, err, 0
 	}
 	err := models.DbClient.MsClient.Model(&models.Person{}).
-			Select("people.id").
-			Joins("JOIN games on people.id = games.uid").
-			Where("people.nickname like ?", "%"+keyword+"%").
-			Group("people.id").
-			Order(order).Offset(offset).Limit(num).Find(&result).
-			Error
+		Select("people.id").
+		Joins("JOIN games on people.id = games.uid").
+		Where("people.nickname like ?", "%"+keyword+"%").
+		Group("people.id").
+		Order(order).Offset(offset).Limit(num).Find(&result).
+		Error
 	if err != nil {
 		return nil, err, 0
 	}
@@ -172,9 +172,9 @@ func SearchGame(keyword string, num, offset int, mtd, zone string) (*[]models.Ga
 		return nil, err, 0
 	}
 	tx := models.DbClient.MsClient.Debug().Where("name LIKE ?", "%"+keyword+"%").
-			Order(order).
-			Limit(num).
-			Offset(offset)
+		Order(order).
+		Limit(num).
+		Offset(offset)
 	var err error
 	if zone != "" {
 		err = tx.Where("zone=?", zone).Find(&result).Error

@@ -37,6 +37,7 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 		noTokenFeature.POST("/change/vertify", service.VertifyExist)
 		noTokenFeature.POST("/change/answer", service.VertifyAnswer)
 		noTokenFeature.POST("/change/password", service.ChangePassword)
+		noTokenFeature.GET("/get/product", service.GetProductInfo)
 	}
 	userFeature := engine.Group("/v1/user")
 	{
@@ -132,22 +133,29 @@ func RegisterRouter(engine *gin.Engine, middlewares ...gin.HandlerFunc) *gin.Eng
 
 	MultiZoneFeature := engine.Group("/v2")
 	{
-		//upload
-		MultiZoneFeature.Use(middleware.Auth())
-		MultiZoneFeature.POST("/upload/info", service.UploadInfoByZone)
-		MultiZoneFeature.POST("/upload/game", service.UploadZipByZone)
-
-		//download
-		MultiZoneFeature.GET("/download/img", service.DownloadImgByZone)
-		MultiZoneFeature.GET("/download/game", service.DownloadGameByZone)
-		MultiZoneFeature.GET("/download/personal", service.DownloadPersonalByZone)
-
-		//getRanking
-		MultiZoneFeature.GET("/rank/zone", service.GetGameRankingByMultiZone)
-		MultiZoneFeature.GET("/rank/download", service.GetGameRankingDownloadingByZone)
-
 		//search
 		MultiZoneFeature.GET("/search/game", service.SearchGameByZone)
+	}
+
+	MultiZoneFeature_UpLoad := engine.Group("/v2/upload")
+	{
+		MultiZoneFeature_UpLoad.Use(middleware.Auth())
+		MultiZoneFeature_UpLoad.POST("/info", service.UploadInfoByZone)
+		MultiZoneFeature_UpLoad.POST("/game", service.UploadZipByZone)
+	}
+
+	MultiZoneFeature_Download := engine.Group("/v2/download")
+	{
+		MultiZoneFeature_Download.GET("/img", service.DownloadImgByZone)
+		MultiZoneFeature_Download.GET("/game", service.DownloadGameByZone)
+		MultiZoneFeature_Download.GET("/personal", service.DownloadPersonalByZone)
+	}
+
+	MultiZoneFeature_Ranking := engine.Group("/v2/rank")
+	{
+		//getRanking
+		MultiZoneFeature_Ranking.GET("/zone", service.GetGameRankingByMultiZone)
+		MultiZoneFeature_Ranking.GET("/download", service.GetGameRankingDownloadingByZone)
 	}
 
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
