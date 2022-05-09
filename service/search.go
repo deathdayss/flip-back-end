@@ -11,77 +11,77 @@ import (
 
 var AllowedGameMtd map[string]bool = map[string]bool{"like": true, "download": true, "comment": true, "time": true}
 
-func SearchPerson(c *gin.Context) {
-	num, err := strconv.Atoi(c.Query("num"))
-	keyword := c.Query("keyword")
-	zone := c.Query("zone")
-	if err != nil || len(keyword) == 0 {
-		c.JSON(http.StatusNotAcceptable, gin.H{
-			"status": 406,
-			"error":  "keyword or num is missing",
-		})
-		return
-	}
-	mode := c.Query("mode")
-	if mode == "" {
-		mode = "game"
-	}
-	if err := repository.AddWord(keyword, mode); err != nil {
-		c.JSON(http.StatusNotAcceptable, gin.H{
-			"status": 406,
-			"error":  "can not connect the redis db",
-		})
-		return
-	}
-	rankMtd, ok := c.GetQuery("method")
-	if !ok || (rankMtd != "like" && rankMtd != "download" && rankMtd != "comment") {
-		rankMtd = "like"
-	}
-	var offset int
-	offsetStr, ok := c.GetQuery("offset")
-	if !ok {
-		offset = 0
-	} else {
-		offset, err = strconv.Atoi(offsetStr)
-		if err != nil {
-			c.JSON(http.StatusNotAcceptable, gin.H{
-				"status": 406,
-				"error":  "offset if wrong",
-			})
-			return
-		}
-		offset = offset * (num - 1)
-	}
-	rankInfo, err := repository.SearchGame(keyword, num, offset, rankMtd, zone)
-	if err != nil || len(*rankInfo) == 0 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"status": 404,
-			"error":  "no data",
-		})
-		return
-	}
-	rankList := []dto.RankItem{}
-	for _, ri := range *rankInfo {
-		/*
-			fp, err := ioutil.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
-			if err != nil {
-				fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
-			}*/
-		rankList = append(rankList, dto.RankItem{
-			ID:          ri.ID,
-			Name:        ri.Name,
-			LikeNum:     ri.LikeNum,
-			DownloadNum: ri.DownloadNum,
-			CommentNum:  ri.CommentNum,
-			Img:         ri.ImgUrl,
-			AuthorName:  repository.FindNickName(ri.UID),
-		})
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"Status": 200,
-		"List":   rankList,
-	})
-}
+// func SearchPerson(c *gin.Context) {
+// 	num, err := strconv.Atoi(c.Query("num"))
+// 	keyword := c.Query("keyword")
+// 	zone := c.Query("zone")
+// 	if err != nil || len(keyword) == 0 {
+// 		c.JSON(http.StatusNotAcceptable, gin.H{
+// 			"status": 406,
+// 			"error":  "keyword or num is missing",
+// 		})
+// 		return
+// 	}
+// 	mode := c.Query("mode")
+// 	if mode == "" {
+// 		mode = "game"
+// 	}
+// 	if err := repository.AddWord(keyword, mode); err != nil {
+// 		c.JSON(http.StatusNotAcceptable, gin.H{
+// 			"status": 406,
+// 			"error":  "can not connect the redis db",
+// 		})
+// 		return
+// 	}
+// 	rankMtd, ok := c.GetQuery("method")
+// 	if !ok || (rankMtd != "like" && rankMtd != "download" && rankMtd != "comment") {
+// 		rankMtd = "like"
+// 	}
+// 	var offset int
+// 	offsetStr, ok := c.GetQuery("offset")
+// 	if !ok {
+// 		offset = 0
+// 	} else {
+// 		offset, err = strconv.Atoi(offsetStr)
+// 		if err != nil {
+// 			c.JSON(http.StatusNotAcceptable, gin.H{
+// 				"status": 406,
+// 				"error":  "offset if wrong",
+// 			})
+// 			return
+// 		}
+// 		offset = offset * (num - 1)
+// 	}
+// 	rankInfo, err := repository.SearchGame(keyword, num, offset, rankMtd, zone)
+// 	if err != nil || len(*rankInfo) == 0 {
+// 		c.JSON(http.StatusNotFound, gin.H{
+// 			"status": 404,
+// 			"error":  "no data",
+// 		})
+// 		return
+// 	}
+// 	rankList := []dto.RankItem{}
+// 	for _, ri := range *rankInfo {
+// 		/*
+// 			fp, err := ioutil.ReadFile("./storage/thumbnail/"+ri.ImgUrl)
+// 			if err != nil {
+// 				fp, _ = ioutil.ReadFile("./storage/thumbnail/not_found.png")
+// 			}*/
+// 		rankList = append(rankList, dto.RankItem{
+// 			ID:          ri.ID,
+// 			Name:        ri.Name,
+// 			LikeNum:     ri.LikeNum,
+// 			DownloadNum: ri.DownloadNum,
+// 			CommentNum:  ri.CommentNum,
+// 			Img:         ri.ImgUrl,
+// 			AuthorName:  repository.FindNickName(ri.UID),
+// 		})
+// 	}
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"Status": 200,
+// 		"List":   rankList,
+// 	})
+// }
 
 // @Summary search a game or person by keyword
 // @Description search a game by keyword
@@ -151,7 +151,7 @@ func Search(c *gin.Context) {
 		offset = offset * (num - 1)
 	}
 	if mode == "person" {
-		rankInfo, err := repository.SearchPerson(keyword, num, offset, rankMtd)
+		rankInfo, err, recordNum := repository.SearchPerson(keyword, num, offset, rankMtd)
 		if err != nil || len(*rankInfo) == 0 {
 			c.JSON(http.StatusNotFound, gin.H{
 				"status": 404,
@@ -166,10 +166,11 @@ func Search(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"Status": 200,
 			"List":   rankList,
+			"recordNum": recordNum,
 		})
 		return
 	}
-	rankInfo, err := repository.SearchGame(keyword, num, offset, rankMtd, zone)
+	rankInfo, err, recordNum := repository.SearchGame(keyword, num, offset, rankMtd, zone)
 	if err != nil || len(*rankInfo) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
 			"status": 404,
@@ -197,6 +198,7 @@ func Search(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"Status": 200,
 		"List":   rankList,
+		"recordNum": recordNum,
 	})
 }
 

@@ -121,7 +121,7 @@ type PersonID struct {
 	ID int `gorm:"column:id`
 }
 
-func SearchPerson(keyword string, num, offset int, mtd string) (*[]PersonID, error) {
+func SearchPerson(keyword string, num, offset int, mtd string) (*[]PersonID, error, int64) {
 	result := make([]PersonID, 0)
 	var order string
 	switch mtd {
@@ -134,6 +134,10 @@ func SearchPerson(keyword string, num, offset int, mtd string) (*[]PersonID, err
 	default:
 		order = "sum(like_num) DESC"
 	}
+	var recordNum int64 = 0
+	if err := models.DbClient.MsClient.Debug().Model(&models.Person{}).Where("name LIKE ?", "%"+keyword+"%").Count(&recordNum).Error; err != nil {
+		return nil, err, 0
+	}
 	err := models.DbClient.MsClient.Model(&models.Person{}).
 			Select("people.id").
 			Joins("JOIN games on people.id = games.uid").
@@ -142,11 +146,11 @@ func SearchPerson(keyword string, num, offset int, mtd string) (*[]PersonID, err
 			Order(order).Offset(offset).Limit(num).Find(&result).
 			Error
 	if err != nil {
-		return nil, err
+		return nil, err, 0
 	}
-	return &result, nil
+	return &result, nil, recordNum
 }
-func SearchGame(keyword string, num, offset int, mtd, zone string) (*[]models.Game, error) {
+func SearchGame(keyword string, num, offset int, mtd, zone string) (*[]models.Game, error, int64) {
 	result := []models.Game{}
 	var order string
 	switch mtd {
@@ -163,6 +167,10 @@ func SearchGame(keyword string, num, offset int, mtd, zone string) (*[]models.Ga
 	// if zone != "" {
 	// 	where = "zone="+zone
 	// }
+	var recordNum int64 = 0
+	if err := models.DbClient.MsClient.Debug().Model(&models.Game{}).Where("name LIKE ?", "%"+keyword+"%").Count(&recordNum).Error; err != nil {
+		return nil, err, 0
+	}
 	tx := models.DbClient.MsClient.Debug().Where("name LIKE ?", "%"+keyword+"%").
 			Order(order).
 			Limit(num).
@@ -174,18 +182,13 @@ func SearchGame(keyword string, num, offset int, mtd, zone string) (*[]models.Ga
 		err = tx.Find(&result).Error
 	}
 	if err != nil {
-		return nil, err
+		return nil, err, 0
 	}
 	actualLen := len(result)
 	if actualLen == 0 {
-		return nil, errors.New("No data")
+		return nil, errors.New("No data"), 0
 	}
-	if actualLen < num {
-		for i := actualLen; i < num; i++ {
-			result = append(result, result[i%actualLen])
-		}
-	}
-	return &result, nil
+	return &result, nil, recordNum
 }
 
 func GetGameRankingDownloading(zone string, num, offset int) (*[]models.Game, error) {
